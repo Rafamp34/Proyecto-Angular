@@ -1,0 +1,44 @@
+:host {
+  // Estilos específicos del modal
+  ion-content {
+    --background: linear-gradient(180deg, #0f0c29, #302b63, #24243e);
+  }
+
+  ion-toolbar {
+    --background: transparent;
+  }
+
+  form {
+    padding: 16px;
+  }
+
+  ion-item {
+    --background: rgba(255, 255, 255, 0.1);
+    --border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  ion-input {
+    --color: white;
+    --placeholder-color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.image-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+
+  .preview-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  ion-button {
+    width: 100%;
+  }
+}

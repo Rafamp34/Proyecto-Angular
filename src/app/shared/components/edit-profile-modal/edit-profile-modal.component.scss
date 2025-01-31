@@ -1,0 +1,106 @@
+:host {
+  --modal-bg: #121212;
+  --input-bg: #272727;
+}
+
+.custom-modal {
+  --width: 500px; /* Hacemos el popup más ancho */
+  --height: 250px; /* Hacemos el popup menos alto */
+}
+
+ion-header {
+  background: var(--modal-bg);
+}
+
+ion-toolbar {
+  --background: var(--modal-bg);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+h1 {
+  color: white;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+ion-button {
+  --color: #666;
+}
+
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.profile-avatar app-picture-selectable {
+  width: 500px; /* Ajusta el tamaño */
+  height: 350px;
+  background: var(--input-bg);
+  border-radius: 50%; /* Hace que sea completamente circular */
+  overflow: hidden; /* Evita que cualquier imagen desbordante se vea fuera del círculo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-avatar app-picture-selectable img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen se adapte sin deformarse */
+  border-radius: 50%; /* Mantiene la imagen dentro del círculo */
+}
+
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.save-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+ion-list {
+  background: var(--modal-bg);
+  padding: 0;
+}
+
+ion-item {
+  --background: var(--input-bg);
+  --border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+ion-input {
+  --color: white;
+  --placeholder-color: #888;
+}
+
+ion-item:last-child {
+  margin-bottom: 0;
+}
+
+.save-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.save-button-container ion-button {
+  --background: white;
+  --color: black;
+  --border-radius: 20px;
+  height: 36px;
+  min-width: 100px;
+}

@@ -1,0 +1,154 @@
+{
+  "COMMON": {
+    "LANGUAGE": "Idioma",
+    "SPANISH": "Español",
+    "ENGLISH": "Inglés",
+    "ERROR": {
+      "LOAD": "Error al cargar los datos",
+      "SAVE": "Error al guardar los cambios"
+    },
+    "SUCCESS": {
+      "SAVE": "Cambios guardados correctamente"
+    },
+    "UPDATE": "Actualizar",
+    "CREATE": "Crear",
+    "SECURITY": "Seguridad",
+    "CANCEL": "Cancelar",
+    "DELETE": "Eliminar",
+    "CLOSE": "Cerrar"
+  },
+  "MENU": {
+    "TITLE": "Menú",
+    "HOME": "Inicio",
+    "SONGS": "Canciones",
+    "PROFILE": "Perfil",
+    "PLAYLISTS": "Listas de reproducción",
+    "LOGOUT": "Cerrar sesión"
+  },
+  "SONG": {
+    "TITLE": "Canciones",
+    "SELECT": "Seleccionar canción",
+    "ADD_BUTTON": "Añadir canción",
+    "EDIT": "Editar canción",
+    "NEW": "Nueva canción",
+    "NAME": "Nombre",
+    "AUTHOR": "Autor",
+    "ALBUM": "Álbum",
+    "DURATION": "Duración",
+    "SEARCH_PLACEHOLDER": "Buscar canción",
+    "ERRORS": {
+      "NAME_REQUIRED": "El nombre es obligatorio",
+      "AUTHOR_REQUIRED": "El autor es obligatorio",
+      "DURATION_REQUIRED": "La duración es obligatoria",
+      "DURATION_FORMAT": "Formato inválido. Use mm:ss (ej: 03:45)"
+    },
+    "SUCCESS": {
+      "CREATE": "Canción creada correctamente",
+      "UPDATE": "Canción actualizada correctamente",
+      "DELETE": "Canción eliminada correctamente"
+    },
+    "MESSAGES": {
+      "DELETE_CONFIRM": "¿Está seguro que desea eliminar esta canción?"
+    }
+  },
+  "PLAYLIST": {
+    "TITLE": "Listas de reproducción",
+    "ADD_BUTTON": "Añadir lista",
+    "EDIT": "Editar lista",
+    "NEW": "Nueva lista",
+    "NAME": "Nombre",
+    "AUTHOR": "Autor",
+    "DURATION": "Duración",
+    "PUBLIC_LIST": "Lista pública",
+    "SONGS": "canciones",
+    "ADD_SONGS": "Añadir canciones",
+    "EMPTY": "Esta playlist está vacía",
+    "ALBUM": "Álbum",
+    "SHARE": {
+      "HEADER": "Compartir playlist",
+      "MESSAGE": "Copia el enlace para compartir esta playlist",
+      "COPY": "Copiar"
+    },
+    "REMOVE_SONG": {
+      "HEADER": "¿Eliminar canción?",
+      "MESSAGE": "¿Estás seguro de que quieres eliminar esta canción de la playlist?"
+    },
+    "SUCCESS": {
+      "SONG_ADDED": "Canción añadida correctamente",
+      "SONG_UPDATED": "Canción actualizada correctamente",
+      "SONG_REMOVED": "Canción eliminada correctamente",
+      "LINK_COPIED": "Enlace copiado al portapapeles"
+    },
+    "ERRORS": {
+      "LOAD": "Error al cargar la playlist",
+      "SONG_ADD": "Error al añadir la canción",
+      "SONG_REMOVE": "Error al eliminar la canción",
+      "NAME_REQUIRED": "El nombre es obligatorio",
+      "AUTHOR_REQUIRED": "El autor es obligatorio",
+      "DURATION_REQUIRED": "La duración es obligatoria"
+    },
+    "MESSAGES": {
+      "DELETE_CONFIRM": "¿Está seguro que desea eliminar esta lista?"
+    }
+  },
+  "PROFILE": {
+    "TITLE": "Perfil",
+    "SUBTITLE": "Gestiona tu información personal aquí",
+    "UPDATE": "Actualizar perfil",
+    "CHANGE_PASSWORD": "Cambiar contraseña",
+    "MY_PLAYLISTS": "Mis listas de reproducción",
+    "NO_PLAYLISTS": "No tienes ninguna lista de reproducción",
+    "SONGS": "canciones",
+    "SECURITY": "Configuración de Seguridad",
+    "TITLES": "Mi Perfil",
+    "TEXT": "listas públicas • Sigue a",
+    "USER": "usuarios",
+    "EDIT": "Editar Perfil",
+    "PLAYLISTS": "Mis Playlists",
+    "DETAILS_TITLE": "Detalles del perfil",
+    "USERNAME": "Nombre de usuario",
+    "EMAIL": "Correo electrónico",
+    "SAVE": "Guardar",
+    "CREATE_PLAYLIST": "Crear lista de reproducción"
+  },
+  "USER": {
+    "NAME": "Nombre",
+    "SURNAME": "Apellidos",
+    "EMAIL": "Correo electrónico",
+    "MY_PLAYLISTS": "Mis listas de reproducción",
+    "USERNAME": "Nombre de usuario",
+    "PICTURE": "Foto de perfil",
+    "ERRORS": {
+      "SURNAME_REQUIRED": "Los apellidos son obligatorios",
+      "NAME_REQUIRED": "El nombre es obligatorio",
+      "EMAIL_REQUIRED": "El correo electrónico es obligatorio",
+      "EMAIL_INVALID": "El correo electrónico no es válido",
+      "USERNAME_REQUIRED": "El nombre de usuario es obligatorio",
+      "PICTURE_REQUIRED": "La foto de perfil es obligatoria"
+    }
+  },
+  "CHANGE_PASSWORD": {
+    "TITLE": "Cambiar contraseña",
+    "OLD_PASSWORD": "Contraseña actual",
+    "NEW_PASSWORD": "Nueva contraseña",
+    "CONFIRM_PASSWORD": "Confirmar nueva contraseña",
+    "SUBMIT": "Cambiar contraseña",
+    "SUCCESS": "Contraseña cambiada correctamente",
+    "ERROR": "Error al cambiar la contraseña",
+    "ERRORS": {
+      "OLD_PASSWORD_REQUIRED": "La contraseña actual es obligatoria",
+      "NEW_PASSWORD_REQUIRED": "La nueva contraseña es obligatoria",
+      "PASSWORD_STRENGTH": "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial",
+      "PASSWORDS_MISMATCH": "Las contraseñas no coinciden"
+    }
+  },
+  "HOME": {
+    "SEARCH": "¿Qué quieres reproducir?",
+    "ALL": "Todo",
+    "MUSIC": "Musica",
+    "PODCATS": "Pódcasts",
+    "RELEASE": "Lo nuevo hoy!!",
+    "RECOMMENDED": "Recomendado para ti",
+    "SHOW": "Mostrar Todo"
+  }
+}

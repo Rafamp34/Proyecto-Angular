@@ -1,0 +1,266 @@
+.spotify-theme {
+  --background: #121212;
+  background: linear-gradient(180deg, rgba(83,83,83,0.7) 0%, #121212 25%);
+}
+
+.transparent-header {
+  position: absolute;
+}
+
+.transparent-header ion-toolbar {
+  --background: transparent;
+  --color: white;
+}
+
+.playlist-header {
+  padding: 80px 16px 16px;
+  position: relative;
+}
+
+.header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+}
+
+.header-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  z-index: 1;
+}
+
+.cover-art {
+  width: 200px;
+  height: 200px;
+  box-shadow: 0 4px 60px rgba(0,0,0,0.5);
+}
+
+.cover-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.playlist-info {
+  text-align: center;
+}
+
+.playlist-type {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.playlist-info h1 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  margin: 0;
+  padding: 0.08em 0 0.12em;
+}
+
+.playlist-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #b3b3b3;
+  margin-top: 8px;
+}
+
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.creator-name {
+  color: #fff;
+  font-weight: 500;
+}
+
+.meta-details {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.actions-bar {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.primary-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.play-button {
+  --background: #1ed760;
+  --background-hover: #1fdf64;
+  --border-radius: 32px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+  height: 48px;
+}
+
+.play-button ion-icon {
+  font-size: 24px;
+}
+
+.shuffle-button {
+  --color: #a7a7a7;
+  font-size: 24px;
+}
+
+.songs-container {
+  padding: 0 16px;
+}
+
+.song-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 12px;
+  color: #fff;
+  border-radius: 4px;
+  gap: 12px;
+}
+
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.track-info img {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+}
+
+.track-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-name {
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  color: #b3b3b3;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-meta {
+  color: #b3b3b3;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.track-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.track-actions ion-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  height: 32px;
+}
+
+.hide-on-mobile {
+  display: none;
+}
+
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Media Queries para Desktop */
+@media (min-width: 768px) {
+  .playlist-header {
+    padding: 80px 32px 32px;
+  }
+
+  .header-content {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 32px;
+    text-align: left;
+  }
+
+  .cover-art {
+    width: 280px;
+    height: 280px;
+  }
+
+  .playlist-info {
+    text-align: left;
+  }
+
+  .playlist-info h1 {
+    font-size: 72px;
+    line-height: 1;
+  }
+
+  .playlist-meta {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .songs-container {
+    padding: 0 32px;
+  }
+
+  .song-row {
+    grid-template-columns: 64px 5fr 3fr 1fr auto;
+    padding: 16px 24px;
+  }
+
+  .hide-on-mobile {
+    display: revert;
+  }
+
+  .hide-on-desktop {
+    display: none;
+  }
+
+  .actions-bar {
+    padding: 32px;
+    gap: 40px;
+  }
+
+  .play-button {
+    height: 64px;
+  }
+
+  .play-button ion-icon {
+    font-size: 32px;
+  }
+}

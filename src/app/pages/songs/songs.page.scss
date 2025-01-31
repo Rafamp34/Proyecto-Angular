@@ -1,0 +1,117 @@
+.song-card {
+    margin: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 200px;
+  }
+
+  .image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    overflow: hidden;
+  }
+
+  .song-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .song-card ion-card-header {
+    padding: 8px;
+  }
+
+  .song-card ion-card-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .song-card ion-card-subtitle {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+    margin: 4px 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .song-card ion-card-content {
+    padding: 0 8px 8px;
+  }
+
+  .album-name {
+    font-size: 12px;
+    margin: 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .duration {
+    font-size: 11px;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px;
+    border-top: 1px solid var(--ion-color-light);
+  }
+
+  .action-buttons ion-button {
+    --padding-start: 4px;
+    --padding-end: 4px;
+    height: 30px;
+  }
+
+  ion-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .empty-state {
+    padding: 32px 16px;
+    text-align: center;
+  }
+
+  .empty-state ion-icon {
+    font-size: 48px;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+
+  .empty-state h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 8px;
+  }
+
+  .empty-state p {
+    color: var(--ion-color-medium);
+    margin: 0 0 16px;
+    font-size: 14px;
+  }
+
+  .add-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+
+  ion-searchbar {
+    padding: 0 8px;
+  }
+
+  ion-col {
+    padding: 20px;
+  }
+  

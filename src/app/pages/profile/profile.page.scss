@@ -1,0 +1,545 @@
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #282828;
+
+  app-picture-selectable {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    margin-left: 100px;
+    margin-top: -5px;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    ::ng-deep {
+      .user-picture {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .empty-picture-btn {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.5);
+
+        ion-icon {
+          font-size: 2.5rem;
+          color: white;
+        }
+      }
+
+      .change-picture-btn,
+      .delete-picture-btn {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        margin: 0;
+        border-radius: 0;
+        background: rgba(0, 0, 0, 0.7);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover {
+        .change-picture-btn,
+        .delete-picture-btn {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+// Ajustes del header para mantener el layout
+.profile-header {
+  padding: 32px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  .profile-info {
+    flex: 1;
+  }
+}
+
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.save-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.profile-info {
+  h1 {
+    color: #fff;
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+  }
+
+  .profile-type {
+    color: #fff;
+    font-size: 14px;
+    margin: 8px 0;
+  }
+
+  .profile-stats {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+  }
+}
+
+.menu-dots {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+  ion-button {
+    --color: rgba(255, 255, 255, 0.7);
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+}
+
+.playlist-list {
+  background: #121212;
+  padding: 24px;
+
+  ion-list {
+    background: transparent;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: #fff;
+    --border-color: rgba(255, 255, 255, 0.1);
+
+    ion-label {
+      h3 {
+        color: #fff;
+        font-weight: 500;
+      }
+      p {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+}
+
+.logout-button {
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 222px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s ease;
+  margin-left: auto;
+}
+
+.logout-button:hover {
+  background-color: darkred;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.playlist-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  text-align: center;
+}
+
+.playlist-item {
+  text-align: center;
+}
+
+.playlist-thumbnail img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.playlist-info h3 {
+  color: white;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.profile-image {
+  position: relative;
+  cursor: pointer;
+
+  .edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    ion-icon {
+      font-size: 24px;
+      color: white;
+    }
+  }
+
+  &:hover .edit-overlay {
+    opacity: 1;
+  }
+}
+
+.password-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ion-color-light);
+}
+
+.edit-profile-btn {
+  position: absolute;
+  right: 80px;
+  top: 20px;
+  --color: white;
+  font-size: 24px;
+}
+
+.profile-container {
+  position: relative;
+  background: linear-gradient(180deg, #404040 0%, #121212 100%);
+  padding: 20px;
+}
+
+.playlist-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.playlist-item {
+  text-align: center;
+  width: 150px; // Ancho fijo para que todas las playlists tengan el mismo tamaño
+}
+
+.playlist-thumbnail {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #282828;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.playlist-info h3 {
+  color: white;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.create-playlist {
+  .playlist-thumbnail {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .add-icon {
+      font-size: 48px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  .playlist-info h3 {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-header {
+    padding: 16px 0;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    position: relative;
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+
+    app-picture-selectable {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      ::ng-deep {
+        .user-picture {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
+
+        .empty-picture-btn {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, 0.5);
+
+          ion-icon {
+            font-size: 2rem;
+          }
+        }
+
+        .change-picture-btn,
+        .delete-picture-btn {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 32px;
+          margin: 0;
+          border-radius: 0;
+          background: rgba(0, 0, 0, 0.7);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        &:hover,
+        &:active {
+          .change-picture-btn,
+          .delete-picture-btn {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  .profile-info {
+    width: 100%;
+    text-align: center;
+    margin-top: 16px;
+
+    h1 {
+      font-size: 28px;
+      text-align: center;
+    }
+
+    .profile-type {
+      font-size: 14px;
+      margin: 8px 0;
+    }
+
+    .profile-stats {
+      font-size: 14px;
+    }
+  }
+
+  .logout-button {
+    position: static;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 16px auto 0;
+
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+
+  .menu-dots {
+    position: static;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    right: auto;
+    bottom: auto;
+  }
+
+  .playlist-list {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 20px;
+
+      h2 {
+        font-size: 20px;
+        margin: 0;
+      }
+    }
+  }
+
+  .playlist-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0 8px;
+  }
+
+  .playlist-item {
+    width: 140px;
+    margin: 0 auto;
+  }
+
+  .playlist-thumbnail {
+    width: 140px;
+    height: 140px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .playlist-info {
+    h3 {
+      font-size: 14px;
+      margin: 8px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .create-playlist {
+    .playlist-thumbnail {
+      width: 140px;
+      height: 140px;
+
+      .add-icon {
+        font-size: 32px;
+      }
+    }
+  }
+}
+
+// Ajustes adicionales para pantallas muy pequeñas
+@media (max-width: 480px) {
+  .playlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .playlist-item {
+    width: 120px;
+  }
+
+  .playlist-thumbnail {
+    width: 120px;
+    height: 120px;
+  }
+
+  .create-playlist {
+    .playlist-thumbnail {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-info {
+    h1 {
+      font-size: 24px;
+    }
+  }
+}

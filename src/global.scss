@@ -1,0 +1,102 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+
+.custom-modal {
+  --width: 900px;  /* Aumenta el ancho */
+  --height: 550px; /* Reduce la altura */
+  --border-radius: 12px;
+}
+
+.custom-modal::part(backdrop) {
+  background: rgba(0, 0, 0, 0.6); /* Ajusta el fondo oscuro */
+}
+
+.custom-modal::part(content) {
+  width: var(--width);
+  height: var(--height);
+  max-width: 90vw; /* Evita que sea demasiado grande en pantallas pequeñas */
+  max-height: 90vh;
+  border-radius: var(--border-radius);
+}
+
+
+
+.custom-modal.spotify-theme {
+  --width: 400px;
+  --height: 550px;
+  --border-radius: 12px;
+  
+  &::part(content) {
+    background: linear-gradient(180deg, black, #2aac16fb, black);
+    color: white;
+  }
+
+  ion-header {
+    ion-toolbar {
+      --background: transparent;
+      --color: white;
+    }
+  }
+
+  ion-content {
+    --background: transparent;
+  }
+
+  ion-item {
+    --background: rgba(0, 0, 0, 0.905);
+    --border-color: rgba(255, 255, 255, 0.784);
+    --color: white;
+    
+    &::part(native) {
+      border-radius: 8px;
+    }
+  }
+
+  ion-input {
+    --color: white;
+    --placeholder-color: rgba(255, 255, 255, 0.6);
+  }
+
+  ion-button {
+    --background: #2aac16fb;
+    --background-hover: #ffffff;
+    --ripple-color: rgba(0, 255, 38, 0.4);
+    margin-top: 20px;
+  }
+}
