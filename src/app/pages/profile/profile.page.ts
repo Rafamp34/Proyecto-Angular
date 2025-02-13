@@ -65,10 +65,10 @@ export class ProfilePage implements OnInit {
   }
 
   async ngOnInit() {
-    this.loadPlaylists();
+    this.loadPlaylists(); // Asegúrate de que esta línea esté presente
     const loading = await this.loadingController.create();
     await loading.present();
-
+  
     try {
       this.user = await this.authService.getCurrentUser();
       if(this.user) {
@@ -77,7 +77,7 @@ export class ProfilePage implements OnInit {
           email: this.user.email
         });
         console.log('Setting profile picture URL:', this.user.image?.url);
-
+  
         this.profilePictureControl.setValue(this.user.image?.url || '');
         const playlists = await lastValueFrom(this.playlistsService.getByUserId(this.user.id));
         this._playlists.next(playlists || []);
@@ -259,13 +259,20 @@ export class ProfilePage implements OnInit {
       await modal.present();
     }
 
-    loadPlaylists() {
-      this.page = 1;
-      this.playlistsService.getAll(this.page, this.pageSize).subscribe({
-        next: (response: Paginated<Playlist>) => {
-          this._playlists.next([...response.data]);
-          this.page++;
-          this.pages = response.pages;
+    async loadPlaylists() {
+      const user = await this.authService.getCurrentUser(); // Obtén el usuario actual
+      if (!user) {
+        console.error('No user found');
+        return;
+      }
+    
+      // Llama al servicio para obtener las playlists del usuario actual
+      this.playlistsService.getByUserId(user.id).subscribe({
+        next: (playlists: Playlist[] | null) => {
+          this._playlists.next(playlists ?? []); // Actualiza el BehaviorSubject con las playlists del usuario
+        },
+        error: (err) => {
+          console.error('Error loading playlists:', err);
         }
       });
     }

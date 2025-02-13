@@ -19,7 +19,6 @@ export class UserMappingStrapiService implements IUserMapping {
     }
 
     getOne(data: any): User {
-
         if (!data || !data.data) {
             console.warn('Los datos recibidos son nulos o indefinidos:', data);
             return {
@@ -29,15 +28,17 @@ export class UserMappingStrapiService implements IUserMapping {
                 provider: data?.provider || 'unknown',
                 confirmed: data?.confirmed || false,
                 blocked: data?.blocked || false,
+                name: data?.name || '', // Añadir name
+                surname: data?.surname || '', // Añadir surname
                 followers: [],
                 following: [],
                 playlists_ids: [],
                 image: undefined,
                 createdAt: data?.createdAt || new Date().toISOString(),
                 updatedAt: data?.updatedAt || new Date().toISOString()
-            };
-        }
-
+                };
+            }
+      
         const attributes = data.data.attributes;
         return {
             id: data.data.id.toString(),
@@ -46,6 +47,8 @@ export class UserMappingStrapiService implements IUserMapping {
             provider: attributes.provider,
             confirmed: attributes.confirmed,
             blocked: attributes.blocked,
+            name: attributes.name || '', // Añadir name
+            surname: attributes.surname || '', // Añadir surname
             followers: attributes.followers?.data?.map((f: { id: number | string }) => f.id.toString()) || [],
             following: attributes.following?.data?.map((f: { id: number | string }) => f.id.toString()) || [],
             playlists_ids: attributes.playlists?.data?.map((p: { id: number | string }) => p.id.toString()) || [],
@@ -55,7 +58,7 @@ export class UserMappingStrapiService implements IUserMapping {
                 medium: attributes.image.formats?.medium?.url,
                 small: attributes.image.formats?.small?.url,
                 thumbnail: attributes.image.formats?.thumbnail?.url
-            } : undefined,
+          } : undefined,
             createdAt: attributes.createdAt,
             updatedAt: attributes.updatedAt
         };

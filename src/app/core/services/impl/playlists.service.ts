@@ -64,9 +64,11 @@ export class PlaylistsService extends BaseService<Playlist> implements IPlaylist
   }
   
   getByUserId(userId: string): Observable<Playlist[] | null> {
-    const filters: SearchParams = { 'user': userId };
-    return this.repository.getAll(1, 1000, filters).pipe(
-      map(res => Array.isArray(res) ? res : res.data)
+    return this.repository.getAll(1, 1000, {}).pipe(
+      map(res => {
+        const playlists = Array.isArray(res) ? res : res.data;
+        return playlists.filter(playlist => playlist.users_IDS.includes(userId)); // Filtro en el frontend
+      })
     );
   }
 

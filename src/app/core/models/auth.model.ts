@@ -12,6 +12,13 @@ export interface SignUpPayload{
     gender:string,
     group:string,
     user:string
+    image?: {
+        url: string;
+        large: string;
+        medium: string;
+        small: string;
+        thumbnail: string;
+    };
 }
 
 export interface User{

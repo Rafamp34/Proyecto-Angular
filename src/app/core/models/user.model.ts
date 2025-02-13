@@ -4,6 +4,8 @@ import { Model } from "./base.model";
 export interface User extends Model {
     username: string;
     email: string;
+    name: string;
+    surname: string;
     displayName?: string;
     image?: {
         url: string | undefined;

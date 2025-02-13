@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IAuthMapping } from "../interfaces/auth-mapping.interface";
 import { SignInPayload, SignUpPayload, User } from "../../models/auth.model";
-import { UserCredential, User as FirebaseUser, updateProfile } from 'firebase/auth';
+import { User as FirebaseUser } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class FirebaseAuthMappingService implements IAuthMapping {
     return {
       email: payload.email,
       password: payload.password,
-      displayName: `${payload.name} ${payload.surname}` // Añadimos el nombre completo
+      displayName: `${payload.name} ${payload.surname}` // Concatenar nombre y apellido
     };
   }
 
@@ -66,5 +66,4 @@ export class FirebaseAuthMappingService implements IAuthMapping {
       } : undefined
     };
   }
-
 }

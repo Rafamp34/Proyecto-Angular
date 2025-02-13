@@ -79,6 +79,7 @@ export class HomePage implements OnInit {
         if (userData) {
           const updatedUser: User = {
             ...userData,
+            displayName: userData.displayName || `${userData.name} ${userData.surname}`,
             image: userData.image || undefined 
           };
           this._currentUser.next(updatedUser);
@@ -88,7 +89,6 @@ export class HomePage implements OnInit {
         console.error('Error loading user data:', error);
       }
     });
-    
   }
 
   onSearchChange(event: CustomEvent) {
@@ -133,16 +133,9 @@ export class HomePage implements OnInit {
         if (!user) {
           throw new Error('No user found');
         }
-
-        const playlists$ = this.playlistsSvc.getAll(1, 9, { sort: 'createdAt:desc' }).pipe(
-          map(response => 'data' in response ? response.data : response),
-          catchError(err => {
-            console.error('Error loading playlists:', err);
-            return of([]);
-          })
-        );
-        
-        const songs$ = this.songsSvc.getAll(1, 8, { sort: 'createdAt:desc' }).pipe(
+  
+        // Obtener todas las canciones de una sola vez
+        const allSongs$ = this.songsSvc.getAll(1, 1000, { sort: 'createdAt:desc' }).pipe(
           map(response => 'data' in response ? response.data : response),
           switchMap(async songs => this.enrichSongWithArtists(songs)),
           catchError(err => {
@@ -150,27 +143,34 @@ export class HomePage implements OnInit {
             return of([]);
           })
         );
-
-        const recommendedSongs$ = this.songsSvc.getAll(1, 8, { sort: 'createdAt:asc' }).pipe(
-          map(response => 'data' in response ? response.data : response),
-          switchMap(async songs => this.enrichSongWithArtists(songs)),
-          catchError(err => {
-            console.error('Error loading recommended songs:', err);
-            return of([]);
-          })
-        );
-
+  
         return forkJoin({
-          playlists: playlists$,
-          songs: songs$,
-          recommendedSongs: recommendedSongs$
+          playlists: this.playlistsSvc.getAll(1, 9, { sort: 'createdAt:desc' }).pipe(
+            map(response => 'data' in response ? response.data : response),
+            catchError(err => {
+              console.error('Error loading playlists:', err);
+              return of([]);
+            })
+          ),
+          allSongs: allSongs$
         });
+      }),
+      map(({ playlists, allSongs }) => {
+        // Dividir las canciones en dos grupos
+        const songs = allSongs.slice(0, 8); // Las 8 más recientes
+        const recommendedSongs = allSongs.slice(-8); // Las 8 más antiguas
+  
+        return {
+          playlists,
+          songs,
+          recommendedSongs
+        };
       })
     ).subscribe({
-      next: ({playlists, songs, recommendedSongs}) => {
+      next: ({ playlists, songs, recommendedSongs }) => {
         this._quickAccess.next(playlists);
-        this._newReleases.next(songs);
-        this._recommendedSongs.next(recommendedSongs);
+        this._newReleases.next(songs); // Canciones nuevas (las más recientes)
+        this._recommendedSongs.next(recommendedSongs); // Canciones recomendadas (las más antiguas)
       },
       error: (error) => {
         console.error('Error loading content:', error);

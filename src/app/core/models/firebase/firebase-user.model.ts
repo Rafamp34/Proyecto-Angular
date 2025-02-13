@@ -2,6 +2,8 @@
 export interface FirebaseUser {
     uid: string;
     email: string;
+    name: string;
+    surname: string;
     displayName?: string;
     image?: string;
     followers: string[];

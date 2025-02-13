@@ -16,13 +16,29 @@
     <!-- Nombre -->
     <ion-item>
       <ion-input [label]="'PLAYLIST.NAME' | translate" 
-                label-placement="stacked" 
-                type="text" 
-                formControlName="name">
+                 label-placement="stacked" 
+                 type="text" 
+                 formControlName="name">
       </ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name')?.touched">
       {{ 'PLAYLIST.ERRORS.NAME_REQUIRED' | translate }}
+    </ion-text>
+
+    <ion-text color="danger" *ngIf="formGroup.get('author')?.errors?.['required'] && formGroup.get('author')?.touched">
+      {{ 'PLAYLIST.ERRORS.AUTHOR_REQUIRED' | translate }}
+    </ion-text>
+
+    <!-- Duración -->
+    <ion-item>
+      <ion-input [label]="'PLAYLIST.DURATION' | translate" 
+                 label-placement="stacked" 
+                 type="text" 
+                 formControlName="duration">
+      </ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formGroup.get('duration')?.errors?.['required'] && formGroup.get('duration')?.touched">
+      {{ 'PLAYLIST.ERRORS.DURATION_REQUIRED' | translate }}
     </ion-text>
 
     <!-- Imagen -->

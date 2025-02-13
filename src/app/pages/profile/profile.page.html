@@ -11,10 +11,12 @@
   <div class="profile-container">
     <div class="profile-header">
       <div class="profile-avatar">
-        <app-picture-selectable 
-          [formControl]="profilePictureControl"
-          (ngModelChange)="onProfilePictureChange($event)">
-        </app-picture-selectable>
+        <img 
+          [src]="user?.image?.url || 'assets/default-avatar.png'" 
+          alt="{{ user?.username }}'s profile picture"
+          (click)="onPhotoClick()"
+          class="profile-image"
+        />
       </div>
       <div class="profile-info">
         <div class="profile-type">{{ 'PROFILE.TITLES' | translate }}</div>
@@ -42,6 +44,7 @@
       <h2>{{ 'PROFILE.PLAYLISTS' | translate }}</h2>
     </div>
     <div class="playlist-grid">
+      <!-- Botón para crear una nueva playlist -->
       <div class="playlist-item create-playlist" (click)="openPlaylistModal()">
         <div class="playlist-thumbnail">
           <ion-icon name="add-outline" class="add-icon"></ion-icon>
@@ -50,13 +53,14 @@
           <h3>{{ 'PROFILE.CREATE_PLAYLIST' | translate }}</h3>
         </div>
       </div>
-
+    
+      <!-- Lista de playlists del usuario -->
       <div *ngFor="let playlist of playlists$ | async" class="playlist-item">
         <div class="playlist-thumbnail">
           <img [src]="playlist.image?.url || 'assets/default-playlist.png'" />
         </div>
         <div class="playlist-info">
-          <h3>{{playlist.name}}</h3>
+          <h3>{{ playlist.name }}</h3>
         </div>
       </div>
     </div>

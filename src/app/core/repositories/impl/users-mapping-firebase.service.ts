@@ -29,22 +29,24 @@ export class UserMappingFirebaseService implements IUserMapping {
 
     getOne(data: FirebaseUser): User {
         return {
-            id: data.uid,
-            username: data.email?.split('@')[0] || '',
-            email: data.email || '',
-            displayName: data.displayName,
-            image: data.image ? {
-                url: data.image,
-                large: data.image,
-                medium: data.image,
-                small: data.image,
-                thumbnail: data.image
-            } : undefined,
-            followers: data.followers || [],
-            following: data.following || [],
-            playlists_ids: data.playlists_ids || []
+          id: data.uid,
+          username: data.email?.split('@')[0] || '',
+          email: data.email || '',
+          displayName: data.displayName,
+          name: data.name || '', // Añadir name
+          surname: data.surname || '', // Añadir surname
+          image: data.image ? {
+            url: data.image,
+            large: data.image,
+            medium: data.image,
+            small: data.image,
+            thumbnail: data.image
+          } : undefined,
+          followers: data.followers || [],
+          following: data.following || [],
+          playlists_ids: data.playlists_ids || []
         };
-    }
+      }
 
     setAdd(data: User): any {
         return {
