@@ -1,0 +1,27 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { IonicModule } from '@ionic/angular';
+
+import { SplashPageRoutingModule } from './splash-routing.module';
+
+import { SplashPage } from './splash.page';
+import { LottieModule, provideLottieOptions } from 'ngx-lottie';
+import player from 'lottie-web';
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    SplashPageRoutingModule,
+    LottieModule,
+  ],
+  providers:[
+    provideLottieOptions({
+      player: () => player,
+    }),
+  ],
+  declarations: [SplashPage]
+})
+export class SplashPageModule {}

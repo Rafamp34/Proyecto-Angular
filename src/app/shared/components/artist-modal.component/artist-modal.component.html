@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ (mode === 'edit' ? 'Edit Artist' : 'New Artist') }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <!-- Name -->
+    <ion-item>
+      <ion-input 
+        label="Name" 
+        label-placement="stacked" 
+        type="text" 
+        formControlName="name">
+      </ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name')?.touched">
+      Name is required
+    </ion-text>
+
+    <!-- Listeners -->
+    <ion-item>
+      <ion-input 
+        label="Listeners" 
+        label-placement="stacked" 
+        type="number" 
+        formControlName="listiners">
+      </ion-input>
+    </ion-item>
+
+    <!-- Image -->
+    <ion-item>
+      <app-picture-selectable formControlName="image"></app-picture-selectable>
+    </ion-item>
+
+    <!-- Songs List -->
+    <ion-item>
+      <ion-label position="stacked">Songs</ion-label>
+      <div class="selected-songs">
+        <ion-chip *ngFor="let song of selectedSongs$ | async">
+          {{ song.name }}
+          <ion-icon name="close-circle" (click)="removeSong(song)"></ion-icon>
+        </ion-chip>
+      </div>
+      <ion-button expand="block" (click)="openSongSelector()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Add Songs
+      </ion-button>
+    </ion-item>
+
+    <div class="ion-padding">
+      <ion-button 
+        [disabled]="!formGroup.valid || !formGroup.dirty" 
+        expand="block" 
+        type="submit">
+        {{ (mode === 'edit' ? 'Update' : 'Create') }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

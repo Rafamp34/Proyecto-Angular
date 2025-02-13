@@ -1,0 +1,154 @@
+{
+  "COMMON": {
+    "LANGUAGE": "Language",
+    "SPANISH": "Spanish",
+    "ENGLISH": "English",
+    "ERROR": {
+      "LOAD": "Error loading data",
+      "SAVE": "Error saving changes"
+    },
+    "SUCCESS": {
+      "SAVE": "Changes saved successfully"
+    },
+    "UPDATE": "Update",
+    "CREATE": "Create",
+    "SECURITY": "Security",
+    "CANCEL": "Cancel", 
+    "DELETE": "Delete",
+    "CLOSE": "Close"
+  },
+  "MENU": {
+    "TITLE": "Menu",
+    "HOME": "Home",
+    "SONGS": "Songs",
+    "PROFILE": "Profile",
+    "PLAYLISTS": "Playlists",
+    "LOGOUT": "Logout"
+  },
+  "SONG": {
+    "TITLE": "Songs",
+    "SELECT": "Select song",
+    "ADD_BUTTON": "Add song",
+    "EDIT": "Edit song",
+    "NEW": "New song",
+    "NAME": "Name",
+    "AUTHOR": "Author",
+    "ALBUM": "Album",
+    "DURATION": "Duration",
+    "SEARCH_PLACEHOLDER": "Search song",
+    "ERRORS": {
+      "NAME_REQUIRED": "Name is required",
+      "AUTHOR_REQUIRED": "Author is required",
+      "DURATION_REQUIRED": "Duration is required",
+      "DURATION_FORMAT": "Invalid format. Use mm:ss (e.g. 03:45)"
+    },
+    "SUCCESS": {
+      "CREATE": "Song created successfully",
+      "UPDATE": "Song updated successfully",
+      "DELETE": "Song deleted successfully"
+    },
+    "MESSAGES": {
+      "DELETE_CONFIRM": "Are you sure you want to delete this song?"
+    }
+  },
+  "PLAYLIST": {
+    "TITLE": "Playlists",
+    "ADD_BUTTON": "Add playlist",
+    "EDIT": "Edit playlist",
+    "NEW": "New playlist",
+    "NAME": "Name",
+    "AUTHOR": "Author", 
+    "DURATION": "Duration",
+    "PUBLIC_LIST": "Public playlist",
+    "SONGS": "songs",
+    "ADD_SONGS": "Add songs",
+    "EMPTY": "This playlist is empty",
+    "ALBUM": "Album",
+    "SHARE": {
+      "HEADER": "Share playlist",
+      "MESSAGE": "Copy the link to share this playlist",
+      "COPY": "Copy"
+    },
+    "REMOVE_SONG": {
+      "HEADER": "Remove song?",
+      "MESSAGE": "Are you sure you want to remove this song from the playlist?"
+    },
+    "SUCCESS": {
+      "SONG_ADDED": "Song added successfully",
+      "SONG_UPDATED": "Song updated successfully",
+      "SONG_REMOVED": "Song removed successfully",
+      "LINK_COPIED": "Link copied to clipboard"
+    },
+    "ERRORS": {
+      "LOAD": "Error loading playlist",
+      "SONG_ADD": "Error adding song",
+      "SONG_REMOVE": "Error removing song",
+      "NAME_REQUIRED": "Name is required",
+      "AUTHOR_REQUIRED": "Author is required",
+      "DURATION_REQUIRED": "Duration is required"
+    },
+    "MESSAGES": {
+      "DELETE_CONFIRM": "Are you sure you want to delete this playlist?"
+    }
+  },
+  "PROFILE": {
+    "TITLE": "Profile",
+    "SUBTITLE": "Manage your personal information here",
+    "UPDATE": "Update profile",
+    "CHANGE_PASSWORD": "Change password",
+    "MY_PLAYLISTS": "My playlists",
+    "NO_PLAYLISTS": "You don't have any playlists yet",
+    "SONGS": "songs",
+    "SECURITY": "Security Settings",
+    "TITLES": "My Profile",
+    "TEXT": "public lists • Follow",
+    "USER": "users",
+    "EDIT": "Edit Profile",
+    "PLAYLISTS": "My Playlists",
+    "DETAILS_TITLE": "Profile details",
+    "USERNAME": "Username",
+    "EMAIL": "Email",
+    "SAVE": "Save",
+    "CREATE_PLAYLIST": "Create playlist"
+  },
+  "USER": {
+    "NAME": "First Name",
+    "SURNAME": "Last Name",
+    "EMAIL": "Email",
+    "MY_PLAYLISTS": "My Playlists",
+    "USERNAME": "Username",
+    "PICTURE": "Profile Picture",
+    "ERRORS": {
+      "SURNAME_REQUIRED": "Last name is required",
+      "NAME_REQUIRED": "First name is required",
+      "EMAIL_REQUIRED": "Email is required",
+      "EMAIL_INVALID": "Invalid email address",
+      "USERNAME_REQUIRED": "Username is required",
+      "PICTURE_REQUIRED": "Profile picture is required"
+    }
+  },
+  "CHANGE_PASSWORD": {
+    "TITLE": "Change password",
+    "OLD_PASSWORD": "Current password",
+    "NEW_PASSWORD": "New password",
+    "CONFIRM_PASSWORD": "Confirm new password",
+    "SUBMIT": "Change password",
+    "SUCCESS": "Password changed successfully",
+    "ERROR": "Error changing password",
+    "ERRORS": {
+      "OLD_PASSWORD_REQUIRED": "Current password is required",
+      "NEW_PASSWORD_REQUIRED": "New password is required",
+      "PASSWORD_STRENGTH": "Password must have at least 8 characters, one uppercase, one lowercase, one number and one special character",
+      "PASSWORDS_MISMATCH": "Passwords do not match"
+    }
+  },
+  "HOME": {
+    "SEARCH": "What do you want to reproduce?",
+    "ALL": "All",
+    "MUSIC": "Music",
+    "PODCATS": "Podcasts",
+    "RELEASE": "What's new today!!",
+    "RECOMMENDED": "Recommended for you",
+    "SHOW": "Shows all"
+  }
+}

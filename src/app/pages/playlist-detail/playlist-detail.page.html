@@ -1,0 +1,99 @@
+<ion-header class="ion-no-border transparent-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">{{ (playlist$ | async)?.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="sharePlaylist()">
+        <ion-icon slot="icon-only" name="share-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="spotify-theme">
+  <ng-container *ngIf="playlist$ | async as playlist">
+    <div class="playlist-header">
+      <div class="header-bg"></div>
+      <div class="header-content">
+        <div class="cover-art">
+          <img [src]="playlist.image?.url || 'assets/default-playlist.png'" [alt]="playlist.name">
+        </div>
+        <div class="playlist-info">
+          <div class="playlist-type">{{ 'PLAYLIST.PUBLIC_LIST' | translate }}</div>
+          <h1>{{playlist.name}}</h1>
+          <div class="playlist-meta">
+            <img [src]="'assets/default-avatar.png'" class="user-avatar" alt="user avatar">
+            <span class="creator-name">{{playlist.author}}</span>
+            <ng-container *ngIf="songs$ | async as songs">
+              <div class="meta-details">
+                <span class="bullet" *ngIf="songs.length > 0">•</span>
+                <span class="song-count">{{ songs.length }} {{ 'PLAYLIST.SONGS' | translate }}</span>
+                <span class="duration">{{ songs | playlistDuration:'long' }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <div class="primary-actions">
+        <ion-button class="play-button" (click)="onPlay()">
+          <ion-icon [name]="(isPlaying$ | async) ? 'pause' : 'play'"></ion-icon>
+        </ion-button>
+        <ion-button class="shuffle-button" (click)="onShuffle()">
+          <ion-icon name="shuffle"></ion-icon>
+        </ion-button>
+      </div>
+      <div class="secondary-actions" *ngIf="isOwner">
+        <ion-button fill="clear" (click)="addSong()">
+          <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+          <span class="hide-on-mobile">{{ 'PLAYLIST.ADD_SONGS' | translate }}</span>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="songs-container">
+      <ng-container *ngIf="songs$ | async as songs">
+        <div class="empty-playlist" *ngIf="songs.length === 0">
+          <p>{{ 'PLAYLIST.EMPTY' | translate }}</p>
+          <ion-button *ngIf="isOwner" color="primary" (click)="addSong()">
+            <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+            {{ 'PLAYLIST.ADD_SONGS' | translate }}
+          </ion-button>
+        </div>
+
+        <div class="song-row" *ngFor="let song of songs; let i = index">
+          <div class="track-number hide-on-mobile" (click)="playSong(song, i)">{{i + 1}}</div>
+          <div class="track-info" (click)="playSong(song, i)">
+            <img [src]="song.image?.thumbnail || 'assets/default-song.png'" [alt]="song.name">
+            <div class="track-text">
+              <div class="track-name">{{song.name}}</div>
+              <div class="track-artist">{{song.artistNames?.join(', ') || 'Unknown Artist'}}</div>
+              <!-- Mobile-only album and duration -->
+              <div class="mobile-meta hide-on-desktop">
+                <span class="track-album">{{song.album || '-'}}</span>
+                <span class="bullet">•</span>
+                <span class="track-duration">{{song.duration}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="track-album hide-on-mobile" (click)="playSong(song, i)">{{song.album || '-'}}</div>
+          <div class="track-duration hide-on-mobile" (click)="playSong(song, i)">{{song.duration}}</div>
+          <div class="track-actions" *ngIf="isOwner">
+            <ion-button fill="clear" color="danger" (click)="removeSong(song, $event)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" color="light" class="hide-on-mobile">
+              <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</ion-content>

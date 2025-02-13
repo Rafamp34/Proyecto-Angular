@@ -1,0 +1,56 @@
+# Ionic Angular specific ignores
+.ionic/
+www/
+platforms/
+plugins/
+resources/
+android/
+ios/
+
+# Angular specific ignores
+.angular/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# IDE specific
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environment Files
+src/environments/*.js
+src/environments/*.js.map
+
+# Capacitor
+capacitor.config.json
+ios/App/
+android/app/
+
+# Build generated
+*.map
+*.js.map
+*.css.map
+
+# Testing
+coverage/
+/cypress/videos/
+/cypress/screenshots/
+
+# Misc
+*.log
+*.tmp
+*.tmp.*
+*.swp

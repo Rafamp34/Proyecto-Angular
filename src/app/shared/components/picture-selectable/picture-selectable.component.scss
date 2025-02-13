@@ -1,0 +1,63 @@
+div.user-picture{
+    min-width:300px;
+    height:300px;
+    ion-img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+    }
+    ion-button.picture-button{
+        margin:0;
+        --padding-start:0;
+        --padding-end:0;
+    
+        .button-native{
+            padding:0!important;
+        }
+    }
+}
+
+ion-modal.auto-height{
+    &.bottom {
+        align-items: flex-end;
+    }
+
+    --height: auto;
+
+    .ion-page {
+        position: relative;
+        display: block;
+        contain: content;
+
+        .inner-content {
+            max-height: 80vh;
+            overflow: auto;
+            padding: 10px;
+        }
+    }
+}
+
+.change-picture-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  --background: rgba(var(--ion-color-primary-rgb), 0.7);
+}
+
+.delete-picture-btn {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  --background: rgba(var(--ion-color-danger-rgb), 0.7);
+}
+
+.empty-picture-btn {
+  height: 100%;
+  width: 100%;
+}
+
+.empty-picture-icon {
+  width: 100%;
+  height: 100%;
+}

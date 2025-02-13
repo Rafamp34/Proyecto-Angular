@@ -1,0 +1,22 @@
+.selected-songs {
+    margin: 10px 0;
+    min-height: 40px;
+  }
+  
+  ion-chip {
+    margin: 5px;
+  }
+  
+  ion-button[expand="block"] {
+    margin-top: 16px;
+  }
+  
+  .ion-padding {
+    margin-top: 20px;
+  }
+  
+  ion-item {
+    margin-bottom: 16px;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+  }

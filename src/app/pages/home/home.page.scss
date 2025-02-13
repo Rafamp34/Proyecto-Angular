@@ -1,0 +1,433 @@
+:host {
+  --spotify-black: #121212;
+  --spotify-dark-gray: #282828;
+  --spotify-light-gray: #b3b3b3;
+  --spotify-green: #09ff22;
+}
+
+ion-content.spotify-theme {
+  --background: linear-gradient(180deg, #262626 0%, #121212 100%);
+}
+
+// Header styles
+ion-toolbar {
+  --min-height: 80px !important;
+  --background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 0.1rem 0;
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px; 
+    margin: 0 auto;
+    position: relative;
+    padding: 0 1rem;
+
+    ion-searchbar {
+      --background: #242424;
+      --color: white;
+      --placeholder-color: #909090;
+      --icon-color: #909090;
+      --border-radius: 23px;
+      --box-shadow: none;
+      padding: 0;
+      height: 46px;
+
+      &::part(search-icon) {
+        margin-left: 12px;
+      }
+
+      &::part(input) {
+        padding-left: 40px;
+      }
+    }
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 1rem;
+  }
+
+  ion-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-right: 1rem;
+
+    ion-fab {
+      position: relative;
+      
+      ion-fab-button {
+        --background: var(--spotify-black);
+        --color: white;
+        --box-shadow: none;
+        margin: 0;
+      }
+    }
+
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+  }
+}
+
+// Navigation Tabs
+.nav-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  padding-left: 8%;
+  background: #282828;
+
+  .tab-button {
+    background: transparent;
+    border: none;
+    color: var(--spotify-light-gray);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.active {
+      background: white;
+      color: black;
+    }
+
+    &:not(.active):hover {
+      color: white;
+    }
+  }
+}
+
+// Playlist Grid
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 16px;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .playlist-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    padding: 12px;
+
+    .card-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      ion-thumbnail {
+        --size: 48px;
+        min-width: 48px;
+        margin-right: 8px;
+
+        img {
+          border-radius: 4px;
+        }
+      }
+
+      .playlist-info {
+        h2 {
+          color: white;
+          font-size: 16px;
+          margin: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        p {
+          color: var(--spotify-light-gray);
+          font-size: 14px;
+          margin: 4px 0 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .play-button {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+
+      ion-icon {
+        font-size: 40px;
+        color: var(--spotify-green);
+        background: #000;
+        border-radius: 50%;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      }
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+
+      .play-button {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Releases Section
+.releases-section {
+  padding: 24px 16px;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h2 {
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .show-all {
+      background: none;
+      border: none;
+      color: var(--spotify-light-gray);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+
+  .releases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+
+    .release-card {
+      background: var(--spotify-dark-gray);
+      padding: 16px;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+      cursor: pointer;
+
+      .image-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 100%;
+        margin-bottom: 16px;
+        
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 4px;
+        }
+
+        .play-button {
+          position: absolute;
+          bottom: 8px;
+          right: 8px;
+          opacity: 0;
+          transform: translateY(8px);
+          transition: all 0.3s ease;
+
+          ion-icon {
+            font-size: 48px;
+            color: var(--spotify-green);
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+          }
+        }
+      }
+
+      .song-info {
+        h3 {
+          color: white;
+          font-size: 16px;
+          margin: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        p {
+          color: var(--spotify-light-gray);
+          font-size: 14px;
+          margin: 4px 0 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+
+        .play-button {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 20px;
+  transition: background-color 0.2s ease;
+  max-width: 150px; // Evita que ocupe mucho espacio en móvil
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .profile-avatar {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .username {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px; // Evita que el nombre sea demasiado largo
+
+    @media (max-width: 480px) {
+      max-width: 60px; // Reduce el tamaño en móviles pequeños
+    }
+  }
+}
+
+// Para ocultar el nombre solo en pantallas muy pequeñas
+@media (max-width: 380px) {
+  .user-profile .username {
+    display: none;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .search-container {
+    max-width: 90%;
+  }
+
+  .playlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .user-profile .username {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  ion-toolbar {
+    --min-height: 60px !important;
+  }
+
+  .playlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+
+// Searchbar responsive behavior
+.search-container {
+  position: relative;
+
+  .search-icon {
+    display: none;
+    font-size: 24px;
+    color: var(--spotify-light-gray);
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .search-icon {
+      display: block;
+    }
+
+    ion-searchbar {
+      display: none;
+    }
+
+    &.active {
+      ion-searchbar {
+        display: block;
+        width: 100%;
+      }
+
+      .search-icon {
+        display: none;
+      }
+    }
+  }
+}
+
+// Playlist Grid Responsive
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    right: 20px; /* Ajusta el espacio a la derecha */
+    top: 15px; /* Ajusta la posición a la altura del logo */
+  }
+}
+

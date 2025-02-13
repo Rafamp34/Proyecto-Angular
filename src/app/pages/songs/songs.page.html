@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'SONG.TITLE' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onAddSong()" class="add-button">
+        <ion-icon name="add-outline"></ion-icon>
+        {{ 'SONG.ADD_BUTTON' | translate }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [placeholder]="'SONG.SEARCH_PLACEHOLDER' | translate"
+      (ionInput)="onSearchChange($event)"
+      [debounce]="500"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Grid view for larger screens -->
+  <ion-grid class="ion-hide-md-down">
+    <ion-row>
+      <ion-col size="6" size-md="3" size-lg="2" *ngFor="let song of songs$ | async">
+        <app-song-grid-card
+          [song]="song"
+          (edit)="onUpdateSong(song)"
+          (delete)="onDeleteSong(song)"
+          (play)="onPlaySong(song)">
+        </app-song-grid-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- List view for mobile -->
+  <ion-list class="ion-hide-md-up">
+    <ion-item-sliding *ngFor="let song of songs$ | async">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img [src]="song.image?.thumbnail || 'assets/default-song.png'" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{song.name}}</h2>
+          <h3>{{song.artistNames?.join(', ') || 'Unknown Artist'}}</h3>
+          <p>{{song.album}}</p>
+          <p class="duration">{{song.duration}}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item-options>
+        <ion-item-option color="primary" (click)="onUpdateSong(song)">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="onDeleteSong(song)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="(songs$ | async)?.length === 0">
+    <ion-icon name="musical-notes-outline" size="large"></ion-icon>
+    <h2>{{ 'SONG.NO_SONGS' | translate }}</h2>
+    <p>{{ 'SONG.ADD_FIRST_SONG' | translate }}</p>
+    <ion-button (click)="onAddSong()">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      {{ 'SONG.ADD_BUTTON' | translate }}
+    </ion-button>
+  </div>
+</ion-content>

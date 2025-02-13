@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'SONG.SELECT' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <ion-list>
+    <ion-item *ngFor="let song of availableSongs$ | async" button (click)="selectSong(song)">
+      <ion-thumbnail slot="start">
+        <img [src]="song.image?.url || 'assets/default-song.png'" [alt]="song.name">
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{song.name}}</h2>
+        <p>{{song.artistNames?.join(', ') || 'Unknown Artist'}}</p>
+      </ion-label>
+      <ion-note slot="end">{{song.duration}}</ion-note>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

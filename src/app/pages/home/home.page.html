@@ -1,0 +1,127 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <div slot="start" class="logo-container ion-padding-start">
+      <img src="/assets/logo.png" alt="App Logo" height="60" width="60">
+    </div>
+
+    <div class="search-container" *ngIf="showSearch || !isMobile">
+      <ion-searchbar
+        placeholder="{{ 'HOME.SEARCH' | translate }}"
+        [(ngModel)]="searchQuery"
+        (ionChange)="onSearchChange($event)"
+        [animated]="true"
+        [debounce]="300">
+      </ion-searchbar>
+    </div>
+
+    <ion-buttons slot="end">
+      <!-- Botón para alternar búsqueda en móviles -->
+      <ion-button *ngIf="isMobile" (click)="toggleSearch()">
+        <ion-icon name="search-outline"></ion-icon>
+      </ion-button>
+      <ion-fab>
+        <ion-fab-button class="language-btn" size="small">
+          <ion-icon name="language-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="start" class="language-list">
+          <ion-fab-button 
+            (click)="changeLanguage('es')" 
+            [ngClass]="{'active-language': currentLang === 'es'}">
+            <ion-text>ES</ion-text>
+          </ion-fab-button>
+          <ion-fab-button 
+            (click)="changeLanguage('en')" 
+            [ngClass]="{'active-language': currentLang === 'en'}">
+            <ion-text>EN</ion-text>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
+      
+      <div class="user-profile" routerLink="/profile">
+        <ion-avatar class="profile-avatar">
+          <img [src]="(authSvc.user$ | async)?.image?.url || 'assets/default-avatar.png'" alt="Avatar">
+        </ion-avatar>
+        <span class="username">{{ (authSvc.user$ | async)?.username }}</span>
+    </div>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="spotify-theme">
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="tab-button" [class.active]="selectedTab === 'all'" (click)="selectTab('all')">{{ 'HOME.ALL' | translate }}</button>
+    <button class="tab-button" [class.active]="selectedTab === 'music'" (click)="selectTab('music')">{{ 'HOME.MUSIC' | translate }}</button>
+    <button class="tab-button" [class.active]="selectedTab === 'podcasts'" (click)="selectTab('podcasts')">{{ 'HOME.PODCATS' | translate }}</button>
+  </div>
+
+  <!-- Playlists Grid -->
+  <div class="playlist-grid">
+    <div class="playlist-item" *ngFor="let playlist of quickAccess$ | async">
+      <div class="playlist-card" (click)="openPlaylist(playlist)">
+        <div class="card-content">
+          <ion-thumbnail>
+            <img [src]="playlist.image?.url || 'assets/default-playlist.png'" [alt]="playlist.name">
+          </ion-thumbnail>
+          <div class="playlist-info">
+            <h2>{{playlist.name}}</h2>
+            <p>{{playlist.author}}</p>
+          </div>
+        </div>
+        <div class="play-button">
+          <ion-icon name="play-circle"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Releases Section -->
+  <section class="releases-section">
+    <div class="section-header">
+      <h2>{{ 'HOME.RELEASE' | translate }}</h2>
+      <button class="show-all" (click)="showAllSongs()">{{ 'HOME.SHOW' | translate }}</button>
+    </div>
+    
+    <div class="releases-grid">
+      <div class="release-item" *ngFor="let song of newReleases$ | async">
+        <div class="release-card" (click)="openSong(song)">
+          <div class="image-container">
+            <img [src]="song.image?.url || 'assets/default-song.png'" [alt]="song.name">
+            <div class="play-button">
+              <ion-icon name="play-circle"></ion-icon>
+            </div>
+          </div>
+          <div class="song-info">
+            <h3>{{song.name}}</h3>
+            <p>{{song.artistNames?.join(', ') || 'Unknown Artist'}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommended Section -->
+  <section class="releases-section">
+    <div class="section-header">
+      <h2>{{ 'HOME.RECOMMENDED' | translate }}</h2>
+      <button class="show-all" (click)="showAllRecommended()">{{ 'HOME.SHOW' | translate }}</button>
+    </div>
+    
+    <div class="releases-grid">
+      <div class="release-item" *ngFor="let song of recommendedSongs$ | async">
+        <div class="release-card" (click)="openSong(song)">
+          <div class="image-container">
+            <img [src]="song.image?.url || 'assets/default-song.png'" [alt]="song.name">
+            <div class="play-button">
+              <ion-icon name="play-circle"></ion-icon>
+            </div>
+          </div>
+          <div class="song-info">
+            <h3>{{song.name}}</h3>
+            <p>{{song.artistNames?.join(', ') || 'Unknown Artist'}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ion-content>

@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="header-content">
+      <h1>{{ 'PROFILE.DETAILS_TITLE' | translate }}</h1>
+      <ion-button fill="clear" (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <ion-grid>
+      <ion-row>
+        <!-- Columna para la imagen -->
+        <ion-col size="5" class="profile-avatar">
+          <app-picture-selectable formControlName="image"></app-picture-selectable>
+        </ion-col>
+
+        <!-- Columna para los campos de usuario -->
+        <ion-col size="7">
+          <div class="profile-fields">
+            <ion-list>
+              <ion-item>
+                <ion-input [label]="'PROFILE.USERNAME' | translate"
+                           label-placement="stacked"
+                           formControlName="username">
+                </ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-input [label]="'PROFILE.EMAIL' | translate"
+                           label-placement="stacked"
+                           formControlName="email">
+                </ion-input>
+              </ion-item>
+
+              <ion-item button (click)="openChangePasswordModal()" lines="none">
+                <ion-icon slot="start" name="key-outline"></ion-icon>
+                <ion-label>{{ 'PROFILE.CHANGE_PASSWORD' | translate }}</ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Botón de Guardar -->
+    <div class="save-button-container">
+      <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" type="submit">
+        {{ 'PROFILE.SAVE' | translate }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

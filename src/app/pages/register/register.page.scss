@@ -1,0 +1,163 @@
+:host {
+  --background-color: #121212;
+  --card-background: #181818;
+  --primary-color: #1DB954;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B3B3B3;
+  --error-color: #F15E6C;
+}
+
+ion-content {
+  --background: var(--background-color);
+}
+
+.register-wrapper {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.register-container {
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+  background: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.5s ease-out;
+  margin: 20px auto;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .title {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+}
+
+.profile-picture-section {
+  margin-bottom: 2rem;
+  
+  app-picture-selectable {
+    --background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}
+
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.input-item {
+  --background: rgba(255, 255, 255, 0.1);
+  --border-radius: 4px;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  --highlight-height: 0;
+  --border-width: 0;
+
+  &.item-has-focus {
+    --background: rgba(255, 255, 255, 0.15);
+  }
+
+  ion-icon {
+    color: var(--text-secondary);
+    margin-right: 0.75rem;
+  }
+
+  ion-input {
+    --color: var(--text-primary);
+    --placeholder-color: var(--text-secondary);
+    --placeholder-opacity: 0.8;
+  }
+}
+
+.error-text {
+  color: var(--error-color);
+  font-size: 0.75rem;
+  margin: 0.25rem 0 0 1rem;
+  
+  p {
+    margin: 0.25rem 0;
+  }
+}
+
+.register-button {
+  --background: var(--primary-color);
+  --background-hover: #1ed760;
+  --border-radius: 500px;
+  --color: var(--text-primary);
+  margin-top: 2rem;
+  height: 48px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  
+  &:hover {
+    --background: #1ed760;
+  }
+
+  &:disabled {
+    --background: #1db95480;
+    opacity: 0.7;
+  }
+}
+
+.login-section {
+  text-align: center;
+  margin-top: 2rem;
+  
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+}
+
+.login-link-button {
+  --background: transparent;
+  --background-hover: rgba(255, 255, 255, 0.1);
+  --border-color: rgba(255, 255, 255, 0.3);
+  --border-radius: 500px;
+  --color: var(--text-primary);
+  height: 48px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  
+  &:hover {
+    --background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Estilos específicos para el selector de imagen
+ion-card {
+  --background: transparent;
+  margin: 0;
+  box-shadow: none;
+  
+  ion-card-content {
+    padding: 0;
+  }
+}

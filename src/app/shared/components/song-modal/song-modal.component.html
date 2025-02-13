@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (mode === 'edit' ? 'SONG.EDIT' : 'SONG.NEW') | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <!-- Nombre -->
+    <ion-item>
+      <ion-input [label]="'SONG.NAME' | translate" 
+                 label-placement="stacked" 
+                 type="text" 
+                 formControlName="name">
+      </ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name')?.touched">
+      {{ 'SONG.ERRORS.NAME_REQUIRED' | translate }}
+    </ion-text>
+
+    <!-- Artistas -->
+    <ion-item>
+      <ion-select [label]="'SONG.ARTISTS' | translate"
+                  label-placement="stacked"
+                  formControlName="artists_IDS"
+                  [multiple]="true"
+                  [compareWith]="compareWith">
+        <ion-select-option *ngFor="let artist of availableArtists$ | async" [value]="artist.id">
+          {{artist.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formGroup.get('artists_IDS')?.errors?.['required'] && formGroup.get('artists_IDS')?.touched">
+      {{ 'SONG.ERRORS.ARTISTS_REQUIRED' | translate }}
+    </ion-text>
+
+    <!-- Álbum -->
+    <ion-item>
+      <ion-input [label]="'SONG.ALBUM' | translate" 
+                 label-placement="stacked" 
+                 type="text" 
+                 formControlName="album">
+      </ion-input>
+    </ion-item>
+
+    <!-- Duración -->
+    <ion-item>
+      <ion-input [label]="'SONG.DURATION' | translate" 
+                 label-placement="stacked" 
+                 type="text"
+                 placeholder="mm:ss"
+                 formControlName="duration">
+      </ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formGroup.get('duration')?.errors?.['required'] && formGroup.get('duration')?.touched">
+      {{ 'SONG.ERRORS.DURATION_REQUIRED' | translate }}
+    </ion-text>
+    <ion-text color="danger" *ngIf="formGroup.get('duration')?.errors?.['pattern'] && formGroup.get('duration')?.touched">
+      {{ 'SONG.ERRORS.DURATION_FORMAT' | translate }}
+    </ion-text>
+
+    <!-- Imagen -->
+    <ion-item>
+      <app-picture-selectable formControlName="image"></app-picture-selectable>
+    </ion-item>
+
+    <div class="ion-padding">
+      <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" 
+                  expand="block" 
+                  type="submit">
+        {{ (mode === 'edit' ? 'COMMON.UPDATE' : 'COMMON.CREATE') | translate }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

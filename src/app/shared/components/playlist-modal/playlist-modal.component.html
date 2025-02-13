@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (mode === 'edit' ? 'PLAYLIST.EDIT' : 'PLAYLIST.NEW') | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <!-- Nombre -->
+    <ion-item>
+      <ion-input [label]="'PLAYLIST.NAME' | translate" 
+                label-placement="stacked" 
+                type="text" 
+                formControlName="name">
+      </ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formGroup.get('name')?.errors?.['required'] && formGroup.get('name')?.touched">
+      {{ 'PLAYLIST.ERRORS.NAME_REQUIRED' | translate }}
+    </ion-text>
+
+    <!-- Imagen -->
+    <ion-item>
+      <app-picture-selectable formControlName="image"></app-picture-selectable>
+    </ion-item>
+
+    <div class="ion-padding">
+      <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" 
+                  expand="block" 
+                  type="submit">
+        {{ (mode === 'edit' ? 'COMMON.UPDATE' : 'COMMON.CREATE') | translate }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>
