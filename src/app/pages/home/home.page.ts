@@ -52,22 +52,11 @@ export class HomePage implements OnInit {
     this.currentLang = this.languageService.getStoredLanguage();
   }
 
-  ngOnInit() {
-    this.checkIfMobile(); 
+  async ngOnInit() {
+    this.checkIfMobile();
     window.addEventListener('resize', this.checkIfMobile.bind(this));
-    this.authSvc.ready$.pipe(
-      filter(ready => ready),
-      switchMap(() => this.authSvc.authenticated$),
-      take(1)
-    ).subscribe(isAuthenticated => {
-      if (!isAuthenticated) {
-        this.router.navigate(['/login']);
-        return;
-      }
-
-      this.loadUserContent();
-    });
-
+  
+    // Suscripción al usuario actual
     this.authSvc.user$.pipe(
       filter(user => user !== undefined),
       switchMap(user => {
@@ -80,7 +69,7 @@ export class HomePage implements OnInit {
           const updatedUser: User = {
             ...userData,
             displayName: userData.displayName || `${userData.name} ${userData.surname}`,
-            image: userData.image || undefined 
+            image: userData.image || undefined
           };
           this._currentUser.next(updatedUser);
         }
@@ -88,6 +77,20 @@ export class HomePage implements OnInit {
       error: (error) => {
         console.error('Error loading user data:', error);
       }
+    });
+  
+    // Verificar autenticación y cargar contenido
+    this.authSvc.ready$.pipe(
+      filter(ready => ready),
+      switchMap(() => this.authSvc.authenticated$),
+      take(1)
+    ).subscribe(isAuthenticated => {
+      if (!isAuthenticated) {
+        this.router.navigate(['/login']);
+        return;
+      }
+  
+      this.loadUserContent();
     });
   }
 

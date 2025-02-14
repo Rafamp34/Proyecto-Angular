@@ -13,6 +13,8 @@ import { SongDetailModalComponent } from './components/song-detail-modal/song-de
 import { PasswordVisibilityPipe } from './pipe/password-visibility.pipe';
 import { PlaylistDurationPipe } from './pipe/playlist-duration.pipte';
 import { SongGridCardComponent } from './components/song-grid-card/song-grid-card.component';
+import { DurationPipe } from './pipe/duration.pipe';
+import { ArtistGridCardComponent } from './components/artist-grid-card/artist-grid-card.component';
 
 @NgModule({
   declarations: [
@@ -24,9 +26,11 @@ import { SongGridCardComponent } from './components/song-grid-card/song-grid-car
     EditProfileModalComponent,
     SongDetailModalComponent,
     SongGridCardComponent,
+    ArtistGridCardComponent,
     // Pipes
     PasswordVisibilityPipe,
-    PlaylistDurationPipe
+    PlaylistDurationPipe,
+    DurationPipe
   ],
   imports: [
     CommonModule,
@@ -45,9 +49,11 @@ import { SongGridCardComponent } from './components/song-grid-card/song-grid-car
     EditProfileModalComponent,
     SongDetailModalComponent,
     SongGridCardComponent,
+    ArtistGridCardComponent,
     // Pipes
     PasswordVisibilityPipe,
-    PlaylistDurationPipe
+    PlaylistDurationPipe,
+    DurationPipe
 
   ]
 })

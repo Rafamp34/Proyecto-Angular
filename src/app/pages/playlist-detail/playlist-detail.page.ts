@@ -8,11 +8,13 @@ import { PlaylistsService } from 'src/app/core/services/impl/playlists.service';
 import { SongsService } from 'src/app/core/services/impl/songs.service';
 import { BaseAuthenticationService } from 'src/app/core/services/impl/base-authentication.service';
 import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { SongDetailModalComponent } from 'src/app/shared/components/song-detail-modal/song-detail-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { ArtistsService } from 'src/app/core/services/impl/artists.service';
+import { User } from 'src/app/core/models/user.model';
+import { UserService } from 'src/app/core/services/impl/user.service';
 
 interface SongWithArtists extends Song {
   artistNames?: string[];
@@ -33,6 +35,9 @@ export class PlaylistDetailPage implements OnInit {
   private _isPlaying = new BehaviorSubject<boolean>(false);
   isPlaying$ = this._isPlaying.asObservable();
 
+  private _currentUser = new BehaviorSubject<User | null>(null);
+  currentUser$ = this._currentUser.asObservable();
+
   isOwner = false;
   currentPlayingIndex: number | null = null;
 
@@ -47,11 +52,36 @@ export class PlaylistDetailPage implements OnInit {
     private toastCtrl: ToastController,
     private translate: TranslateService,
     private artistsSvc: ArtistsService,
+    private userService: UserService 
   ) { }
 
   async ngOnInit() {
+    this.authSvc.user$.pipe(
+      filter(user => user !== undefined),
+      switchMap(user => {
+        if (!user) return of(null);
+        return this.userService.getById(user.id);
+      })
+    ).subscribe({
+      next: (userData) => {
+        if (userData) {
+          const updatedUser: User = {
+            ...userData,
+            displayName: userData.displayName || `${userData.name} ${userData.surname}`,
+            image: userData.image || undefined
+          };
+          this._currentUser.next(updatedUser);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading user data:', error);
+      }
+    });
+
     this.route.params.pipe(
-      switchMap(params => this.playlistsSvc.getById(params['id'])),
+      switchMap(params => {
+        return this.playlistsSvc.getById(params['id']);
+      }),
       catchError(error => {
         console.error('Error loading playlist:', error);
         this.showToast('PLAYLIST.ERRORS.LOAD');
@@ -61,8 +91,8 @@ export class PlaylistDetailPage implements OnInit {
       if (playlist) {
         this._playlist.next(playlist);
         await this.loadSongs(playlist);
-        const user = await this.authSvc.getCurrentUser();
-        this.isOwner = user?.id === playlist.users_IDS[0];
+        const currentUser = await this.authSvc.getCurrentUser();
+        this.isOwner = currentUser?.id === playlist.users_IDS[0];
       } else {
         this.router.navigate(['/home']);
       }
@@ -309,5 +339,24 @@ export class PlaylistDetailPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  formatDuration(seconds: number): string {
+    if (!seconds) return '00:00';
+    
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+    
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/default-avatar.png';
+    }
   }
 }

@@ -1,0 +1,16 @@
+.artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); // Tarjetas de al menos 250px
+    gap: 16px; // Espacio entre tarjetas
+    padding: 16px; // Espacio alrededor del grid
+  }
+  
+  // Estilos adicionales para el contenido
+  ion-content {
+    --background: #000000; // Fondo claro para el contenido
+  }
+  
+  ion-toolbar {
+    --background: #2f2d2d; // Fondo blanco para la barra de herramientas
+    --color: #ffffff; // Color de texto negro
+  }

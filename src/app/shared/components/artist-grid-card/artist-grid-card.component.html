@@ -1,10 +1,10 @@
-<div class="song-card" 
+<div class="artist-card" 
       (mouseenter)="onMouseEnter()" 
       (mouseleave)="onMouseLeave()">
   <div class="image-container">
-    <img [src]="song.image?.url || 'assets/default-song.png'" 
-          [alt]="song.name"
-          class="song-image">
+    <img [src]="artist.image?.url || 'assets/default-artist.png'" 
+      [alt]="artist.name"
+      class="artist-image">
     
     <div class="overlay" *ngIf="isHovered">
       <div class="action-buttons">
@@ -23,13 +23,8 @@
     </div>
   </div>
 
-  <!-- Información de la canción -->
-  <div class="song-info">
-    <h3 class="song-title">{{song.name}}</h3>
-    <p class="song-artist">{{(artistNames$ | async)?.join(', ')}}</p>
-    <div class="song-details">
-      <span class="duration">{{song.duration | duration}}</span>
-      <span class="album">{{song.album}}</span>
-    </div>
+  <div class="artist-info">
+    <h3 class="artist-name">{{artist.name}}</h3>
+    <p class="artist-listeners">{{artist.listiners | number}} oyentes</p>
   </div>
 </div>

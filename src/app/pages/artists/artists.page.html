@@ -14,25 +14,15 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let artist of artists$ | async">
-      <ion-thumbnail slot="start">
-        <img [src]="artist.image?.url || 'assets/default-artist.png'" [alt]="artist.name">
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{artist.name}}</h2>
-        <p>{{artist.listiners}} listeners</p>
-      </ion-label>
-      <ion-buttons slot="end">
-        <ion-button color="primary" (click)="onUpdateArtist(artist)">
-          <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button color="danger" (click)="onDeleteArtist(artist)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-list>
+  <div class="artists-grid">
+    <app-artist-grid-card
+      *ngFor="let artist of artists$ | async"
+      [artist]="artist"
+      (edit)="onUpdateArtist($event)"
+      (delete)="onDeleteArtist($event)"
+      (select)="onSelectArtist($event)">
+    </app-artist-grid-card>
+  </div>
 
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>

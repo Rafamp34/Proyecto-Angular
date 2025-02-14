@@ -26,7 +26,12 @@
           <div class="playlist-type">{{ 'PLAYLIST.PUBLIC_LIST' | translate }}</div>
           <h1>{{playlist.name}}</h1>
           <div class="playlist-meta">
-            <img [src]="'assets/default-avatar.png'" class="user-avatar" alt="user avatar">
+            <ng-container *ngIf="currentUser$ | async as currentUser">
+              <img [src]="currentUser?.image?.url || 'assets/default-avatar.png'"
+                   class="user-avatar" 
+                   [alt]="currentUser?.username || 'user avatar'"
+                   (error)="onImageError($event)">
+            </ng-container>
             <span class="creator-name">{{playlist.author}}</span>
             <ng-container *ngIf="songs$ | async as songs">
               <div class="meta-details">
@@ -78,12 +83,12 @@
               <div class="mobile-meta hide-on-desktop">
                 <span class="track-album">{{song.album || '-'}}</span>
                 <span class="bullet">•</span>
-                <span class="track-duration">{{song.duration}}</span>
+                <span class="track-duration">{{song.duration | duration}}</span>
               </div>
             </div>
           </div>
           <div class="track-album hide-on-mobile" (click)="playSong(song, i)">{{song.album || '-'}}</div>
-          <div class="track-duration hide-on-mobile" (click)="playSong(song, i)">{{song.duration}}</div>
+          <div class="track-duration hide-on-mobile" (click)="playSong(song, i)">{{song.duration | duration}}</div>
           <div class="track-actions" *ngIf="isOwner">
             <ion-button fill="clear" color="danger" (click)="removeSong(song, $event)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>

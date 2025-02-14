@@ -114,4 +114,6 @@ export class SongDetailModalComponent implements OnInit {
   dismiss() {
     this.modalCtrl.dismiss(null, 'cancel');
   }
+
+  
 }
