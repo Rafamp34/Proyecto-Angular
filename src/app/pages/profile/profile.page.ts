@@ -40,6 +40,7 @@ export class ProfilePage implements OnInit {
   followingCount = 4;
   private _playlists = new BehaviorSubject<Playlist[]>([]);
   playlists$ = this._playlists.asObservable();
+  
   formGroup: FormGroup;
   changePasswordForm: FormGroup;
   profilePictureControl = new FormControl('');
@@ -60,6 +61,7 @@ export class ProfilePage implements OnInit {
     this.formGroup = this.fb.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
+      image: ['']
     });
 
     this.changePasswordForm = this.fb.group({
@@ -84,7 +86,10 @@ export class ProfilePage implements OnInit {
         console.log('User image URL:', this.user.image?.url);
         this.formGroup.patchValue({
           username: this.user.username,
-          email: this.user.email
+          email: this.user.email,
+          image: typeof this.user.image === 'object' ? 
+          this.user.image.url : 
+          undefined
         });
         console.log('Setting profile picture URL:', this.user.image?.url);
 
@@ -113,7 +118,6 @@ export class ProfilePage implements OnInit {
           const loadingElement = await this.loadingController.create();
           await loadingElement.present();
           
-          // Convertir el archivo a base64
           const reader = new FileReader();
           reader.onloadend = async () => {
             try {
@@ -150,11 +154,9 @@ export class ProfilePage implements OnInit {
       await loadingElement.present();
   
       if (newPicture) {
-        // Convertir la imagen base64 a Blob
         const blob = dataURLtoBlob(newPicture);
         console.log('Blob created:', blob);
         
-        // Subir la imagen y obtener el resultado
         const uploadResult = await lastValueFrom(this.mediaService.upload(blob));
         console.log('Upload result:', uploadResult);
         
@@ -172,11 +174,9 @@ export class ProfilePage implements OnInit {
             }
           };
   
-          // Actualizar el perfil del usuario con la nueva imagen
           const updatedUser = await lastValueFrom(this.userService.updateProfile(this.user.id, updateData));
           
           if (updatedUser) {
-            // Asegurarse de que el usuario se actualice en el componente
             this.user = {
               ...this.user,
               ...updatedUser,
