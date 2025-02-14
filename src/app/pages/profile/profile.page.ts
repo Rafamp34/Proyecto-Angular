@@ -65,7 +65,7 @@ export class ProfilePage implements OnInit {
   }
 
   async ngOnInit() {
-    this.loadPlaylists(); // Asegúrate de que esta línea esté presente
+    this.loadPlaylists();
     const loading = await this.loadingController.create();
     await loading.present();
   
@@ -171,7 +171,7 @@ export class ProfilePage implements OnInit {
         user: this.user,
         profile: this.formGroup.value
       },
-      cssClass: 'custom-modal' // Añadimos la clase CSS aquí
+      cssClass: 'custom-modal' 
     });
     return await modal.present();
   }
@@ -260,16 +260,15 @@ export class ProfilePage implements OnInit {
     }
 
     async loadPlaylists() {
-      const user = await this.authService.getCurrentUser(); // Obtén el usuario actual
+      const user = await this.authService.getCurrentUser();
       if (!user) {
         console.error('No user found');
         return;
       }
     
-      // Llama al servicio para obtener las playlists del usuario actual
       this.playlistsService.getByUserId(user.id).subscribe({
         next: (playlists: Playlist[] | null) => {
-          this._playlists.next(playlists ?? []); // Actualiza el BehaviorSubject con las playlists del usuario
+          this._playlists.next(playlists ?? []);
         },
         error: (err) => {
           console.error('Error loading playlists:', err);

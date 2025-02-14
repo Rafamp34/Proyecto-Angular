@@ -134,7 +134,6 @@ export class HomePage implements OnInit {
           throw new Error('No user found');
         }
   
-        // Obtener todas las canciones de una sola vez
         const allSongs$ = this.songsSvc.getAll(1, 1000, { sort: 'createdAt:desc' }).pipe(
           map(response => 'data' in response ? response.data : response),
           switchMap(async songs => this.enrichSongWithArtists(songs)),
@@ -156,9 +155,8 @@ export class HomePage implements OnInit {
         });
       }),
       map(({ playlists, allSongs }) => {
-        // Dividir las canciones en dos grupos
-        const songs = allSongs.slice(0, 8); // Las 8 más recientes
-        const recommendedSongs = allSongs.slice(-8); // Las 8 más antiguas
+        const songs = allSongs.slice(0, 8); 
+        const recommendedSongs = allSongs.slice(-8); 
   
         return {
           playlists,
@@ -169,8 +167,8 @@ export class HomePage implements OnInit {
     ).subscribe({
       next: ({ playlists, songs, recommendedSongs }) => {
         this._quickAccess.next(playlists);
-        this._newReleases.next(songs); // Canciones nuevas (las más recientes)
-        this._recommendedSongs.next(recommendedSongs); // Canciones recomendadas (las más antiguas)
+        this._newReleases.next(songs);
+        this._recommendedSongs.next(recommendedSongs);
       },
       error: (error) => {
         console.error('Error loading content:', error);

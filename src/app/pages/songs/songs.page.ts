@@ -96,7 +96,7 @@ export class SongsPage implements OnInit, OnDestroy {
   loadSongs(isSearch: boolean = false) {
     if (isSearch) {
       this.page = 1;
-      this._songs.next([]); // Clear existing songs for new search
+      this._songs.next([]); 
     }
 
     const filters = this.createSearchFilters();

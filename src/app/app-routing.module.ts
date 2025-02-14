@@ -44,6 +44,11 @@ const routes: Routes = [
     canActivate: [authGuard],
     loadChildren: () => import('./pages/playlist-detail/playlist-detail.module').then(m => m.PlaylistDetailPageModule)
   },
+  {
+    path: 'artists',
+    canActivate: [authGuard],
+    loadChildren: () => import('./pages/artists/artists.module').then(m => m.ArtistsPageModule)
+  },
 ];
 
 @NgModule({
