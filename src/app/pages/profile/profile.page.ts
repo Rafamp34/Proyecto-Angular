@@ -1,6 +1,6 @@
 // profile.page.ts
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'; // Añade FormControl aquí
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,8 +13,18 @@ import { BaseMediaService } from 'src/app/core/services/impl/base-media.service'
 import { EditProfileModalComponent } from '../../shared/components/edit-profile-modal/edit-profile-modal.component';
 import { UserService } from 'src/app/core/services/impl/user.service';
 import { PlaylistModalComponent } from 'src/app/shared/components/playlist-modal/playlist-modal.component';
-import { Paginated } from '../../core/models/paginated.model';
 
+function dataURLtoBlob(dataurl: string): Blob {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)?.[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
 
 @Component({
   selector: 'app-profile',
@@ -46,7 +56,6 @@ export class ProfilePage implements OnInit {
     private mediaService: BaseMediaService,
     private userService: UserService,
     private authSvc: BaseAuthenticationService,
-
   ) {
     this.formGroup = this.fb.group({
       username: ['', [Validators.required]],
@@ -68,16 +77,17 @@ export class ProfilePage implements OnInit {
     this.loadPlaylists();
     const loading = await this.loadingController.create();
     await loading.present();
-  
+
     try {
       this.user = await this.authService.getCurrentUser();
       if(this.user) {
+        console.log('User image URL:', this.user.image?.url);
         this.formGroup.patchValue({
           username: this.user.username,
           email: this.user.email
         });
         console.log('Setting profile picture URL:', this.user.image?.url);
-  
+
         this.profilePictureControl.setValue(this.user.image?.url || '');
         const playlists = await lastValueFrom(this.playlistsService.getByUserId(this.user.id));
         this._playlists.next(playlists || []);
@@ -98,14 +108,27 @@ export class ProfilePage implements OnInit {
     fileInput.onchange = async (e: any) => {
       if (e.target?.files && e.target.files.length > 0) {
         const file = e.target.files[0];
+        
         try {
-          const loading = await this.loadingController.create();
-          await loading.present();
+          const loadingElement = await this.loadingController.create();
+          await loadingElement.present();
           
-          const uploadResult = await lastValueFrom(this.mediaService.upload(file));
+          // Convertir el archivo a base64
+          const reader = new FileReader();
+          reader.onloadend = async () => {
+            try {
+              if (typeof reader.result === 'string') {
+                await this.onProfilePictureChange(reader.result);
+              }
+            } catch (error) {
+              console.error('Error processing image:', error);
+              this.showErrorToast('COMMON.ERROR.UPLOAD');
+            } finally {
+              loadingElement.dismiss();
+            }
+          };
+          reader.readAsDataURL(file);
           
-          await loading.dismiss();
-          this.showSuccessToast('PROFILE.PHOTO_UPDATED');
         } catch (error) {
           console.error(error);
           this.showErrorToast('COMMON.ERROR.UPLOAD');
@@ -115,7 +138,7 @@ export class ProfilePage implements OnInit {
     
     fileInput.click();
   }
-
+  
   async onProfilePictureChange(newPicture: string) {
     if (!this.user?.id) return;
   
@@ -127,29 +150,41 @@ export class ProfilePage implements OnInit {
       await loadingElement.present();
   
       if (newPicture) {
-        const blob = await (await fetch(newPicture)).blob();
+        // Convertir la imagen base64 a Blob
+        const blob = dataURLtoBlob(newPicture);
+        console.log('Blob created:', blob);
+        
+        // Subir la imagen y obtener el resultado
         const uploadResult = await lastValueFrom(this.mediaService.upload(blob));
+        console.log('Upload result:', uploadResult);
         
         if (uploadResult && uploadResult[0]) {
+          const imageUrl = uploadResult[0] as unknown as string;
+          console.log('Image URL:', imageUrl);
+  
           const updateData: Partial<User> = {
             image: {
-              url: uploadResult[0].toString(),
-              large: uploadResult[0].toString(),
-              medium: uploadResult[0].toString(),
-              small: uploadResult[0].toString(),
-              thumbnail: uploadResult[0].toString()
+              url: imageUrl,
+              large: imageUrl,
+              medium: imageUrl,
+              small: imageUrl,
+              thumbnail: imageUrl
             }
           };
   
-          await lastValueFrom(this.userService.updateProfile(this.user.id, updateData));
-  
-          if (this.user) {
+          // Actualizar el perfil del usuario con la nueva imagen
+          const updatedUser = await lastValueFrom(this.userService.updateProfile(this.user.id, updateData));
+          
+          if (updatedUser) {
+            // Asegurarse de que el usuario se actualice en el componente
             this.user = {
               ...this.user,
-              ...updateData
+              ...updatedUser,
+              image: updateData.image
             };
             
-            this.profilePictureControl.setValue(updateData.image?.url || '');
+            this.profilePictureControl.setValue(imageUrl);
+            console.log('Updated user image:', this.user.image);
           }
   
           this.showSuccessToast('PROFILE.PHOTO_UPDATED');
@@ -171,7 +206,7 @@ export class ProfilePage implements OnInit {
         user: this.user,
         profile: this.formGroup.value
       },
-      cssClass: 'custom-modal' 
+      cssClass: 'custom-modal'
     });
     return await modal.present();
   }
@@ -179,7 +214,6 @@ export class ProfilePage implements OnInit {
   async changePassword() {
     if (this.changePasswordForm.valid) {
       try {
-        // Change password logic here
         this.showSuccessToast('PROFILE.PASSWORD_CHANGED');
       } catch (error) {
         this.showErrorToast('COMMON.ERROR.SAVE');
@@ -214,65 +248,65 @@ export class ProfilePage implements OnInit {
   }
 
   async openPlaylistModal() {
-      const user = await this.authSvc.getCurrentUser();
-      if (!user) {
-        console.error('No user found');
-        return;
-      }
-  
-      const modal = await this.modalCtrl.create({
-        component: PlaylistModalComponent,
-        componentProps: {},
-        cssClass: 'custom-modal spotify-theme'
-      });
-  
-      modal.onDidDismiss().then((result) => {
-        if (result.role === 'create') {
-          const newPlaylist: Playlist = {
-            name: result.data.name,
-            author: user.username,
-            duration: '0:00',
-            song_IDS: [],
-            users_IDS: [user.id], 
-            ...(result.data.image && {
-              image: {
-                url: result.data.image.url,
-                thumbnail: result.data.image.url,
-                large: result.data.image.url,
-                medium: result.data.image.url,
-                small: result.data.image.url
-              }
-            })
-          };
-  
-          this.playlistsService.add(newPlaylist).subscribe({
-            next: () => {
-              this.loadPlaylists();                
-            },
-            error: (err) => {
-              console.error('Error creating playlist:', err);
+    const user = await this.authSvc.getCurrentUser();
+    if (!user) {
+      console.error('No user found');
+      return;
+    }
+
+    const modal = await this.modalCtrl.create({
+      component: PlaylistModalComponent,
+      componentProps: {},
+      cssClass: 'custom-modal spotify-theme'
+    });
+
+    modal.onDidDismiss().then((result) => {
+      if (result.role === 'create') {
+        const newPlaylist: Playlist = {
+          name: result.data.name,
+          author: user.username,
+          duration: '0:00',
+          song_IDS: [],
+          users_IDS: [user.id],
+          ...(result.data.image && {
+            image: {
+              url: result.data.image.url,
+              thumbnail: result.data.image.url,
+              large: result.data.image.url,
+              medium: result.data.image.url,
+              small: result.data.image.url
             }
-          });
-        }
-      });
+          })
+        };
 
-      await modal.present();
-    }
-
-    async loadPlaylists() {
-      const user = await this.authService.getCurrentUser();
-      if (!user) {
-        console.error('No user found');
-        return;
+        this.playlistsService.add(newPlaylist).subscribe({
+          next: () => {
+            this.loadPlaylists();
+          },
+          error: (err) => {
+            console.error('Error creating playlist:', err);
+          }
+        });
       }
-    
-      this.playlistsService.getByUserId(user.id).subscribe({
-        next: (playlists: Playlist[] | null) => {
-          this._playlists.next(playlists ?? []);
-        },
-        error: (err) => {
-          console.error('Error loading playlists:', err);
-        }
-      });
+    });
+
+    await modal.present();
+  }
+
+  async loadPlaylists() {
+    const user = await this.authService.getCurrentUser();
+    if (!user) {
+      console.error('No user found');
+      return;
     }
+
+    this.playlistsService.getByUserId(user.id).subscribe({
+      next: (playlists: Playlist[] | null) => {
+        this._playlists.next(playlists ?? []);
+      },
+      error: (err) => {
+        console.error('Error loading playlists:', err);
+      }
+    });
+  }
 }
