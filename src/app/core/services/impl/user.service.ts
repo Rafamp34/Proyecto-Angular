@@ -29,7 +29,6 @@ export class UserService extends BaseService<User> implements IUserService {
         return this.update(id, changes as User).pipe(
             tap(updatedUser => {
                 console.log('User updated:', updatedUser);
-                // Actualizar el usuario en el servicio de autenticación
                 (this.authService as any).updateCurrentUser(updatedUser);
             })
         );
@@ -81,7 +80,6 @@ export class UserService extends BaseService<User> implements IUserService {
             filter((userData): userData is User => userData !== null),
             tap(userData => {
                 console.log('User data retrieved:', userData);
-                // Actualizar el usuario en el servicio de autenticación si es el usuario actual
                 if (userData.id === (this.authService as any)._user.value?.id) {
                     (this.authService as any).updateCurrentUser(userData);
                 }
