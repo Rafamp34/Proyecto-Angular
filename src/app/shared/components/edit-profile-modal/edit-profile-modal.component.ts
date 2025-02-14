@@ -27,7 +27,7 @@ export class EditProfileModalComponent implements OnInit {
     private modalCtrl: ModalController
   ) {
     this.formGroup = this.formBuilder.group({
-      username: ['', [Validators.required]],
+      displayName: ['', [Validators.required]], // Cambiado de username a displayName
       email: ['', [Validators.required, Validators.email]],
       image: ['']
     });
@@ -36,7 +36,7 @@ export class EditProfileModalComponent implements OnInit {
   ngOnInit() {
     if (this.user) {
       this.formGroup.patchValue({
-        username: this.user.username || '',
+        displayName: this.user.displayName || '', // Corregido aquí
         email: this.user.email || '',
         image: this.user.image?.url || ''
       });
@@ -52,8 +52,8 @@ export class EditProfileModalComponent implements OnInit {
     try {
       const changes: Partial<User> = {};
 
-      if (this.formGroup.get('username')?.dirty) {
-        changes.username = this.formGroup.get('username')?.value;
+      if (this.formGroup.get('displayName')?.dirty) { // Cambiado de username a displayName
+        changes.displayName = this.formGroup.get('displayName')?.value;
       }
       
       if (this.formGroup.get('email')?.dirty) {
@@ -122,6 +122,10 @@ export class EditProfileModalComponent implements OnInit {
 
   get email() {
     return this.formGroup.controls['email'];
+  }
+
+  get displayName() { // Cambiado de username a displayName
+    return this.formGroup.controls['displayName'];
   }
 
   dismiss() {

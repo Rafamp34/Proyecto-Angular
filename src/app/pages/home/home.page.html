@@ -39,7 +39,7 @@
       
       <div class="user-profile" routerLink="/profile">
         <ion-avatar class="profile-avatar">
-          <img [src]="(authSvc.user$ | async)?.image?.url || 'assets/default-avatar.png'" alt="Avatar">
+          <img [src]="(currentUser$ | async)?.image?.url || 'assets/default-avatar.png'" alt="Avatar">
         </ion-avatar>
         <span class="username">{{ (currentUser$ | async)?.displayName }}</span>
       </div>

@@ -79,26 +79,25 @@ export class ProfilePage implements OnInit {
     this.loadPlaylists();
     const loading = await this.loadingController.create();
     await loading.present();
-
+  
     try {
-      this.user = await this.authService.getCurrentUser();
-      if(this.user) {
-        console.log('User image URL:', this.user.image?.url);
-        this.formGroup.patchValue({
-          username: this.user.username,
-          email: this.user.email,
-          image: typeof this.user.image === 'object' ? 
-          this.user.image.url : 
-          undefined
+      const basicUser = await this.authService.getCurrentUser();
+      if (basicUser?.id) {
+        // Obtener el usuario completo del UserService
+        this.userService.getById(basicUser.id).subscribe({
+          next: (fullUser) => {
+            if (fullUser) {
+              this.user = fullUser;
+              console.log('Usuario completo desde UserService:', this.user);
+            }
+          },
+          error: (error) => {
+            console.error('Error loading full user data:', error);
+          }
         });
-        console.log('Setting profile picture URL:', this.user.image?.url);
-
-        this.profilePictureControl.setValue(this.user.image?.url || '');
-        const playlists = await lastValueFrom(this.playlistsService.getByUserId(this.user.id));
-        this._playlists.next(playlists || []);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);
       this.showErrorToast('COMMON.ERROR.LOAD');
     } finally {
       await loading.dismiss();
