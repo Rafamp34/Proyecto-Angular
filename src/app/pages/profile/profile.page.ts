@@ -1,10 +1,10 @@
 // profile.page.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Subscription } from 'rxjs';
 import { BaseAuthenticationService } from 'src/app/core/services/impl/base-authentication.service';
 import { PlaylistsService } from 'src/app/core/services/impl/playlists.service';
 import { User } from 'src/app/core/models/user.model';
@@ -31,12 +31,13 @@ function dataURLtoBlob(dataurl: string): Blob {
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage implements OnInit, OnDestroy  {
   page: number = 1;
   pageSize: number = 25;
   pages: number = 0;
 
   user?: User | null;
+  private userSubscription: Subscription = new Subscription();
   followingCount = 4;
   private _playlists = new BehaviorSubject<Playlist[]>([]);
   playlists$ = this._playlists.asObservable();
@@ -79,15 +80,14 @@ export class ProfilePage implements OnInit {
     this.loadPlaylists();
     const loading = await this.loadingController.create();
     await loading.present();
-  
+
     try {
       const basicUser = await this.authService.getCurrentUser();
       if (basicUser?.id) {
-        // Obtener el usuario completo del UserService
         this.userService.getById(basicUser.id).subscribe({
           next: (fullUser) => {
             if (fullUser) {
-              this.user = fullUser;
+              this.user = { ...fullUser, id: basicUser.id }; 
               console.log('Usuario completo desde UserService:', this.user);
             }
           },
@@ -96,11 +96,35 @@ export class ProfilePage implements OnInit {
           }
         });
       }
+      this.userSubscription = this.userService.user$.subscribe((user) => {
+        this.user = user; 
+      });
+      
     } catch (error) {
       console.error('Error:', error);
       this.showErrorToast('COMMON.ERROR.LOAD');
     } finally {
       await loading.dismiss();
+    }
+  }
+
+  ngOnDestroy() {
+      this.userSubscription.unsubscribe();
+  }
+
+  async loadUser() {
+    const basicUser = await this.authService.getCurrentUser();
+    if (basicUser?.id) {
+        this.userService.getById(basicUser.id).subscribe({
+            next: (fullUser) => {
+                if (fullUser) {
+                    this.userService.setUser(fullUser);
+                }
+            },
+            error: (error) => {
+                console.error('Error loading full user data:', error);
+            },
+        });
     }
   }
 
@@ -155,38 +179,51 @@ export class ProfilePage implements OnInit {
       if (newPicture) {
         const blob = dataURLtoBlob(newPicture);
         console.log('Blob created:', blob);
-        
+  
         const uploadResult = await lastValueFrom(this.mediaService.upload(blob));
         console.log('Upload result:', uploadResult);
-        
-        if (uploadResult && uploadResult[0]) {
-          const imageUrl = uploadResult[0] as unknown as string;
+  
+        if (uploadResult && uploadResult[0] && typeof uploadResult[0] === 'string') {
+          const imageUrl = uploadResult[0];
           console.log('Image URL:', imageUrl);
+  
+          const uniqueImageUrl = `${imageUrl}?${new Date().getTime()}`;
   
           const updateData: Partial<User> = {
             image: {
-              url: imageUrl,
-              large: imageUrl,
-              medium: imageUrl,
-              small: imageUrl,
-              thumbnail: imageUrl
+              url: uniqueImageUrl,
+              large: uniqueImageUrl,
+              medium: uniqueImageUrl,
+              small: uniqueImageUrl,
+              thumbnail: uniqueImageUrl
             }
           };
   
           const updatedUser = await lastValueFrom(this.userService.updateProfile(this.user.id, updateData));
-          
+  
           if (updatedUser) {
             this.user = {
               ...this.user,
               ...updatedUser,
-              image: updateData.image
+              image: {
+                url: uniqueImageUrl,
+                large: uniqueImageUrl,
+                medium: uniqueImageUrl,
+                small: uniqueImageUrl,
+                thumbnail: uniqueImageUrl
+              }
             };
-            
-            this.profilePictureControl.setValue(imageUrl);
-            console.log('Updated user image:', this.user.image);
+        
+            this.profilePictureControl.setValue(uniqueImageUrl);
+            if (this.user?.image) {
+              console.log('Updated user image:', this.user.image);
+            }
           }
   
           this.showSuccessToast('PROFILE.PHOTO_UPDATED');
+        } else {
+          console.error('Invalid image URL:', uploadResult);
+          this.showErrorToast('COMMON.ERROR.UPLOAD');
         }
       }
     } catch (error) {
@@ -252,13 +289,13 @@ export class ProfilePage implements OnInit {
       console.error('No user found');
       return;
     }
-
+  
     const modal = await this.modalCtrl.create({
       component: PlaylistModalComponent,
       componentProps: {},
       cssClass: 'custom-modal spotify-theme'
     });
-
+  
     modal.onDidDismiss().then((result) => {
       if (result.role === 'create') {
         const newPlaylist: Playlist = {
@@ -277,10 +314,14 @@ export class ProfilePage implements OnInit {
             }
           })
         };
-
+  
         this.playlistsService.add(newPlaylist).subscribe({
-          next: () => {
+          next: (createdPlaylist) => {
             this.loadPlaylists();
+            
+            if (createdPlaylist) {
+              this.userService.notifyPlaylistCreated(createdPlaylist);
+            }
           },
           error: (err) => {
             console.error('Error creating playlist:', err);
@@ -288,7 +329,7 @@ export class ProfilePage implements OnInit {
         });
       }
     });
-
+  
     await modal.present();
   }
 

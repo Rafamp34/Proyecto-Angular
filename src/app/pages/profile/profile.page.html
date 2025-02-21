@@ -11,12 +11,7 @@
   <div class="profile-container">
     <div class="profile-header">
       <div class="profile-avatar">
-        <img 
-          [src]="user?.image?.url || 'assets/default-avatar.png'" 
-          alt="{{ user?.displayName }}'s profile picture"
-          (click)="onPhotoClick()"
-          class="profile-image"
-        />
+        <img class="profile-image" [src]="user?.image?.url" alt="Profile Picture">
       </div>
       <div class="profile-info">
         <div class="profile-type">{{ 'PROFILE.TITLES' | translate }}</div>

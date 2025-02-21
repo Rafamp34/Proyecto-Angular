@@ -82,21 +82,31 @@ export class PictureSelectableComponent  implements OnInit, ControlValueAccessor
    * @param event Evento del DOM
    * @param fileLoader Elemento input file
    */
-  onChangePicture(event:Event, fileLoader:HTMLInputElement){
+  onChangePicture(event: Event, fileLoader: HTMLInputElement) {
     event.stopPropagation();
-    fileLoader.onchange = ()=>{
-      if(fileLoader.files && fileLoader.files?.length>0){
-        var file = fileLoader.files[0];
-        var reader = new FileReader();
-        reader.onload = () => {
-          this.changePicture(reader.result as string);
-        };
-        reader.onerror = (error) =>{
-          console.log(error);
+    fileLoader.onchange = () => {
+      if (fileLoader.files && fileLoader.files?.length > 0) {
+        const file = fileLoader.files[0];
+        
+        // Verificar que es una imagen
+        if (!file.type.startsWith('image/')) {
+          console.error('File is not an image');
+          return;
         }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            // Solo emitir el cambio si es un archivo válido
+            this.changePicture(reader.result);
+          }
+        };
+        reader.onerror = (error) => {
+          console.error('Error reading file:', error);
+        };
         reader.readAsDataURL(file);
       }
-    }
+    };
     fileLoader.click();
   }
 

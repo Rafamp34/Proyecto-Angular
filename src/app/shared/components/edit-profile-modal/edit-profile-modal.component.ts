@@ -1,3 +1,4 @@
+// edit-profile-modal.component.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -27,105 +28,108 @@ export class EditProfileModalComponent implements OnInit {
     private modalCtrl: ModalController
   ) {
     this.formGroup = this.formBuilder.group({
-      displayName: ['', [Validators.required]], // Cambiado de username a displayName
+      displayName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       image: ['']
     });
   }
 
   ngOnInit() {
+    console.log('User received in modal:', this.user);
     if (this.user) {
       this.formGroup.patchValue({
-        displayName: this.user.displayName || '', // Corregido aquí
+        displayName: this.user.displayName || '',
         email: this.user.email || '',
         image: this.user.image?.url || ''
-      });
+      }, { emitEvent: false });
+    } else {
+      console.error('No user data provided to modal');
     }
   }
 
   async onSubmit() {
-    if (!this.formGroup.valid || !this.formGroup.dirty || !this.user) return;
-  
+    if (!this.formGroup.valid || !this.formGroup.dirty) {
+      console.warn('Form is invalid or not dirty');
+      return;
+    }
+
+    if (!this.user?.id) {
+      console.error('No user ID available');
+      await this.showToast('COMMON.ERROR.INVALID_USER', 'danger');
+      return;
+    }
+
     const loading = await this.loadingController.create();
     await loading.present();
-  
+
     try {
       const changes: Partial<User> = {};
 
-      if (this.formGroup.get('displayName')?.dirty) { // Cambiado de username a displayName
+      if (this.formGroup.get('displayName')?.dirty) {
         changes.displayName = this.formGroup.get('displayName')?.value;
       }
-      
+
       if (this.formGroup.get('email')?.dirty) {
         changes.email = this.formGroup.get('email')?.value;
       }
-  
+
       if (this.formGroup.get('image')?.dirty) {
         const imageValue = this.formGroup.get('image')?.value;
         if (imageValue) {
-          const blob = await (await fetch(imageValue)).blob();
-          const uploadResult = await lastValueFrom(this.mediaService.upload(blob));
-          changes.image = { 
-            url: uploadResult[0].toString(),
-            large: undefined,
-            medium: undefined,
-            small: undefined,
-            thumbnail: undefined
+          changes.image = {
+            url: imageValue,
+            large: imageValue,
+            medium: imageValue,
+            small: imageValue,
+            thumbnail: imageValue
           };
         }
       }
-  
-      const result = await lastValueFrom(this.userSvc.updateProfile(this.user.id, changes));
-      
-      await loading.dismiss();
-      const toast = await this.toastController.create({
-        message: await lastValueFrom(this.translateService.get('COMMON.SUCCESS.SAVE')),
-        duration: 3000,
-        position: 'bottom'
-      });
-      await toast.present();
-      this.modalCtrl.dismiss(result, 'updated');
+
+      console.log('Updating user with ID:', this.user.id);
+      console.log('Changes to apply:', changes);
+
+      const updatedUser = await lastValueFrom(this.userSvc.updateProfile(this.user.id, changes));
+      await this.showToast('COMMON.SUCCESS.SAVE', 'success');
+      this.modalCtrl.dismiss(updatedUser, 'updated');
     } catch (error) {
       console.error('Update error:', error);
+      await this.showToast('COMMON.ERROR.SAVE', 'danger');
+    } finally {
       await loading.dismiss();
-      const toast = await this.toastController.create({
-        message: await lastValueFrom(this.translateService.get('COMMON.ERROR.SAVE')),
-        duration: 3000,
-        position: 'bottom'
-      });
-      await toast.present();
     }
   }
 
   async openChangePasswordModal() {
     const modal = await this.modalCtrl.create({
       component: ChangePasswordModalComponent,
-      cssClass: 'custom-modal' 
+      cssClass: 'custom-modal'
     });
 
     await modal.present();
 
     const { data } = await modal.onDidDismiss();
     if (data) {
-      const toast = await this.toastController.create({
-        message: await lastValueFrom(this.translateService.get('CHANGE_PASSWORD.SUCCESS')),
-        duration: 2000,
-        color: 'success'
-      });
-      await toast.present();
+      await this.showToast('CHANGE_PASSWORD.SUCCESS', 'success');
     }
   }
 
-  get username() {
-    return this.formGroup.controls['username'];
+  private async showToast(message: string, color: 'success' | 'danger' = 'success') {
+    const toast = await this.toastController.create({
+      message: await lastValueFrom(this.translateService.get(message)),
+      duration: 3000,
+      position: 'bottom',
+      color: color
+    });
+    await toast.present();
+  }
+
+  get displayName() {
+    return this.formGroup.controls['displayName'];
   }
 
   get email() {
     return this.formGroup.controls['email'];
-  }
-
-  get displayName() { // Cambiado de username a displayName
-    return this.formGroup.controls['displayName'];
   }
 
   dismiss() {

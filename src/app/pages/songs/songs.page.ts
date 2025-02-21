@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest,  debounceTime, distinctUntilChanged, switchMap, takeUntil, of, catchError, startWith} from 'rxjs';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { SongsService } from '../../core/services/impl/songs.service';
 import { Song } from '../../core/models/song.model';
@@ -20,17 +20,17 @@ interface SongWithArtists extends Song {
   styleUrls: ['./songs.page.scss'],
 })
 export class SongsPage implements OnInit, OnDestroy {
-  private _songs: BehaviorSubject<SongWithArtists[]> = new BehaviorSubject<SongWithArtists[]>([]);
-  songs$: Observable<SongWithArtists[]> = this._songs.asObservable();
-  
-  private searchSubject = new Subject<string>();
-  private destroy$ = new Subject<void>();
+  private _searchTermSubject = new BehaviorSubject<string>('');
+  private _pageSubject = new BehaviorSubject<number>(1);
+  private _refreshSubject = new Subject<void>();
+  private _destroy$ = new Subject<void>();
+
+  songs$: Observable<SongWithArtists[]>;
   
   isWeb: boolean = false;
-  page: number = 1;
   pageSize: number = 25;
   pages: number = 0;
-  currentSearchTerm: string = '';
+  loading: boolean = false;
 
   constructor(
     private songsSvc: SongsService,
@@ -43,28 +43,57 @@ export class SongsPage implements OnInit, OnDestroy {
   ) {
     this.isWeb = this.platform.is('desktop');
     
+    this.songs$ = combineLatest([
+      this._searchTermSubject.pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      ),
+      this._pageSubject,
+      this._refreshSubject.pipe(
+        startWith(null)
+      )
+    ]).pipe(
+      switchMap(([searchTerm, page]) => this.fetchSongs(page, searchTerm)),
+      takeUntil(this._destroy$)
+    );
   }
 
   ngOnInit() {
-    this.loadSongs();
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   onSearchChange(event: any) {
     const searchTerm = event.detail.value?.trim() ?? '';
-    this.searchSubject.next(searchTerm);
+    this._searchTermSubject.next(searchTerm);
+    this._pageSubject.next(1);
   }
 
-  private createSearchFilters(): SearchParams {
-    const filters: SearchParams = {};
-    if (this.currentSearchTerm) {
-      filters['name'] = this.currentSearchTerm;
-    }
-    return filters;
+  private fetchSongs(page: number, searchTerm: string = ''): Observable<SongWithArtists[]> {
+    this.loading = true;
+    
+    const filters: SearchParams = searchTerm 
+      ? { name: searchTerm } 
+      : {};
+
+    return this.songsSvc.getAll(page, this.pageSize, filters).pipe(
+      switchMap(async (paginatedResponse: Paginated<Song>) => {
+        const enrichedSongs = await this.enrichSongWithArtists(paginatedResponse.data);
+        
+        this.pages = paginatedResponse.pages;
+        this.loading = false;
+        
+        return enrichedSongs;
+      }),
+      catchError(error => {
+        console.error('Error loading songs:', error);
+        this.loading = false;
+        return of([]);
+      })
+    );
   }
 
   private async enrichSongWithArtists(songs: Song[]): Promise<SongWithArtists[]> {
@@ -93,38 +122,6 @@ export class SongsPage implements OnInit, OnDestroy {
     return enrichedSongs;
   }
 
-  loadSongs(isSearch: boolean = false) {
-    if (isSearch) {
-      this.page = 1;
-      this._songs.next([]); 
-    }
-
-    const filters = this.createSearchFilters();
-
-    this.songsSvc.getAll(this.page, this.pageSize, filters).pipe(
-      switchMap(async (paginatedResponse: Paginated<Song>) => {
-        const enrichedSongs = await this.enrichSongWithArtists(paginatedResponse.data);
-        return {
-          data: enrichedSongs,
-          pages: paginatedResponse.pages
-        };
-      })
-    ).subscribe({
-      next: (result) => {
-        if (isSearch || this.page === 1) {
-          this._songs.next([...result.data]);
-        } else {
-          this._songs.next([...this._songs.value, ...result.data]);
-        }
-        this.page++;
-        this.pages = result.pages;
-      },
-      error: (error) => {
-        console.error('Error loading songs:', error);
-      }
-    });
-  }
-
   async onAddSong() {
     const modal = await this.modalCtrl.create({
       component: SongModalComponent,
@@ -135,8 +132,13 @@ export class SongsPage implements OnInit, OnDestroy {
     modal.onDidDismiss().then((result) => {
       if (result.role === 'create') {
         this.songsSvc.add(result.data).subscribe({
-          next: () => this.loadSongs(true),
-          error: console.error
+          next: () => {
+            this._refreshSubject.next();
+            this._pageSubject.next(1);
+          },
+          error: (error) => {
+            console.error('Error adding song:', error);
+          }
         });
       }
     });
@@ -156,8 +158,12 @@ export class SongsPage implements OnInit, OnDestroy {
     modal.onDidDismiss().then((result) => {
       if (result.role === 'update') {
         this.songsSvc.update(song.id, result.data).subscribe({
-          next: () => this.loadSongs(true),
-          error: console.error
+          next: () => {
+            this._refreshSubject.next();
+          },
+          error: (error) => {
+            console.error('Error updating song:', error);
+          }
         });
       }
     });
@@ -178,8 +184,13 @@ export class SongsPage implements OnInit, OnDestroy {
           role: 'confirm',
           handler: () => {
             this.songsSvc.delete(song.id).subscribe({
-              next: () => this.loadSongs(true),
-              error: console.error
+              next: () => {
+                this._refreshSubject.next();
+                this._pageSubject.next(1);
+              },
+              error: (error) => {
+                console.error('Error deleting song:', error);
+              }
             });
           }
         }
@@ -190,24 +201,15 @@ export class SongsPage implements OnInit, OnDestroy {
   }
 
   onIonInfinite(ev: any) {
-    if (this.page <= this.pages) {
-
-      this.songsSvc.getAll(this.page, this.pageSize).subscribe({
-        next: (response: Paginated<Song>) => {
-          this._songs.next([...this._songs.value, ...response.data]);
-          this.page++;
-          ev.target.complete();
-        },
-        error: (error) => {
-          console.error('Error loading more songs:', error);
-          ev.target.complete();
-        }
-      });
-    } else {
+    if (this.loading || this._pageSubject.value >= this.pages) {
       ev.target.complete();
+      return;
     }
-  }
 
+    this._pageSubject.next(this._pageSubject.value + 1);
+    ev.target.complete();
+  }
+  
   onPlaySong(song: Song) {
     console.log('Playing song:', song);
   }
